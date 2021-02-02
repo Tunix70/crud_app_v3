@@ -47,4 +47,14 @@ public class Post {
     public void setUpdated(Long updated) {
         this.updated = updated;
     }
+
+    @Override
+    public String toString() {
+        return "Post{" +
+                "id=" + id +
+                ", content='" + content + '\'' +
+                ", created=" + created +
+                ", updated=" + updated +
+                '}';
+    }
 }
