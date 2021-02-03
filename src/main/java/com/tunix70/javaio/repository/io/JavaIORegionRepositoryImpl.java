@@ -1,7 +1,6 @@
 package com.tunix70.javaio.repository.io;
 
 import com.google.gson.Gson;
-import com.google.gson.internal.bind.util.ISO8601Utils;
 import com.google.gson.reflect.TypeToken;
 import com.tunix70.javaio.model.Region;
 import com.tunix70.javaio.repository.RegionRepository;
@@ -10,6 +9,7 @@ import java.io.*;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 public class JavaIORegionRepositoryImpl implements RegionRepository {
@@ -44,20 +44,14 @@ public class JavaIORegionRepositoryImpl implements RegionRepository {
     @Override
     public Region update(Region region) {
         List<Region> regions = getAll();
-        Region upRegion = getAll().stream()
-                .filter(p -> region.getId().equals(p.getId()))
-                .findFirst()
-                .orElse(null);
-        if(upRegion == null){
-            System.out.println("Данный регион не обнаружен");
-        }else {
-            regions.set(regions.indexOf(upRegion), region);
-            System.out.println(regions);
-            System.out.println(upRegion.toString());
+        regions.stream().peek(s -> {
+                    if (s.getId().equals(region.getId()))
+                        s.setName(region.getName());
+        }).collect(Collectors.toList());
         writeFile(regions, regionFile);
+            return region;
         }
-        return region;
-    }
+
 
     @Override
     public void deleteById(Long id) {

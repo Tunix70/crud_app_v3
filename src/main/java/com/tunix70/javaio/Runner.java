@@ -14,7 +14,8 @@ import java.util.List;
 public class Runner {
     public static void main(String[] args) throws IOException {
         RegionController rc = new RegionController();
-        rc.deleteById(5l);
+        System.out.println(rc.getAll());
+        System.out.println(rc.getById(3l));
 
     }
 }
