@@ -1,6 +1,7 @@
 package com.tunix70.javaio.repository.io;
 
 import com.google.gson.Gson;
+import com.google.gson.internal.bind.util.ISO8601Utils;
 import com.google.gson.reflect.TypeToken;
 import com.tunix70.javaio.model.Region;
 import com.tunix70.javaio.repository.RegionRepository;
@@ -13,10 +14,10 @@ import java.util.List;
 
 public class JavaIORegionRepositoryImpl implements RegionRepository {
     private final String regionFile = "C:\\Users\\Konstantin\\IdeaProjects\\CRUDapp_new\\src\\main\\resources\\files\\regions.json";
-    private final static Gson gson = new Gson();
+    private static final Gson gson = new Gson();
 
     @Override
-    public List<Region> getAll() {
+    public List<Region> getAll(){
         return readFile(regionFile);
     }
 
@@ -36,23 +37,36 @@ public class JavaIORegionRepositoryImpl implements RegionRepository {
             newRegionList.add(region);
             writeFile(newRegionList, regionFile);
         }
-        else update(region);
+        else System.out.println("Данный регион уже есть в базе");
         return region;
     }
 
     @Override
     public Region update(Region region) {
-        return null;
+        List<Region> regions = getAll();
+        Region upRegion = getAll().stream()
+                .filter(p -> region.getId().equals(p.getId()))
+                .findFirst()
+                .orElse(null);
+        if(upRegion == null){
+            System.out.println("Данный регион не обнаружен");
+        }else {
+            regions.set(regions.indexOf(upRegion), region);
+            System.out.println(regions);
+            System.out.println(upRegion.toString());
+        writeFile(regions, regionFile);
+        }
+        return region;
     }
 
     @Override
-    public void deleteById(Long aLong) {
-
+    public void deleteById(Long id) {
+        List<Region> list = getAll();
+        list.removeIf(n -> n.getId().equals(id));
+        writeFile(list, regionFile);
     }
 
-    public static List<Region> readFile(String file) {
-        ArrayList<Region> list = null;
-
+    public List<Region> readFile(String file) {
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
             String st = br.readLine();
             String jsonFile = "";
@@ -60,17 +74,16 @@ public class JavaIORegionRepositoryImpl implements RegionRepository {
                 jsonFile += st;
                 st = br.readLine();
             }
-
-            Type listRegion = new TypeToken<ArrayList<Region>>() {}.getType();
-            list = gson.fromJson(jsonFile, listRegion);
-
+            Type listRegion = new TypeToken<List<Region>>() {}.getType();
+            List<Region> list = gson.fromJson(jsonFile, listRegion);
+            return list;
         }catch (IOException e){
-            System.out.println("File not found exception");
+            System.out.println("Файл не читается" + e);
+            return null;
         }
-        return list;
     }
 
-    public static void writeFile(List<Region> region, String file){
+    public void writeFile(List<Region> region, String file){
         try(Writer writer = new FileWriter(file)){
 
             //convert Object to JSON
@@ -80,7 +93,7 @@ public class JavaIORegionRepositoryImpl implements RegionRepository {
         }
     }
 
-    public Long generateByID(){
+    public Long generateByID() {
         if(!getAll().isEmpty()){
             return getAll().stream()
                     .skip(getAll().size()-1)
