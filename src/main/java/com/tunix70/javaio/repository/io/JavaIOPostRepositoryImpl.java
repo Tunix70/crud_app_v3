@@ -1,34 +1,101 @@
 package com.tunix70.javaio.repository.io;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.tunix70.javaio.model.Post;
+import com.tunix70.javaio.model.Region;
 import com.tunix70.javaio.repository.PostRepository;
 
+import java.io.*;
+import java.lang.reflect.Type;
+import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class JavaIOPostRepositoryImpl implements PostRepository {
+    private final String postFile = "C:\\Users\\Konstantin\\IdeaProjects\\CRUDapp_new\\src\\main\\resources\\files\\post.json";
+    private static final Gson gson = new Gson();
+    private Long date = new Date().getTime();
 
     @Override
     public List<Post> getAll() {
-        return null;
+        return readFile(postFile);
     }
 
     @Override
-    public Post getById(Long aLong) {
-        return null;
+    public Post getById(Long id) {
+        return getAll().stream()
+                .filter(p -> id.equals(p.getId()))
+                .findFirst()
+                .orElse(null);
     }
 
     @Override
     public Post save(Post post) {
-        return null;
+        if(post.getId() == null){
+            post.setId(generateByID());
+            List<Post> newPostList = getAll();
+            newPostList.add(post);
+            writeFile(newPostList, postFile);
+        }
+        else System.out.println("Данная статья уже есть в базе");
+        return post;
     }
 
     @Override
     public Post update(Post post) {
-        return null;
+        List<Post> posts = getAll();
+        posts.stream().peek(s -> {
+            if (s.getId().equals(post.getId()))
+                s.setContent(post.getContent());
+                s.setCreated(post.getCreated());
+                s.setUpdated(post.getUpdated());
+        }).collect(Collectors.toList());
+        writeFile(posts, postFile);
+        return post;
     }
 
-    @Override
-    public void deleteById(Long aLong) {
 
+    @Override
+    public void deleteById(Long id) {
+        List<Post> list = getAll();
+        list.removeIf(n -> n.getId().equals(id));
+        writeFile(list, postFile);
+    }
+
+    public List<Post> readFile(String file) {
+        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+            String st = br.readLine();
+            String jsonFile = "";
+            while (st != null) {
+                jsonFile += st;
+                st = br.readLine();
+            }
+            Type listPost = new TypeToken<List<Post>>() {}.getType();
+            List<Post> list = gson.fromJson(jsonFile, listPost);
+            return list;
+        }catch (IOException e){
+            System.out.println("Файл не читается" + e);
+            return null;
+        }
+    }
+
+    public void writeFile(List<Post> post, String file){
+        try(Writer writer = new FileWriter(file)){
+
+            //convert Object to JSON
+            gson.toJson(post, writer);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public Long generateByID() {
+        if(!getAll().isEmpty()){
+            return getAll().stream()
+                    .skip(getAll().size()-1)
+                    .findFirst().get().getId()+1;
+        }else
+            return 1l;
     }
 }
