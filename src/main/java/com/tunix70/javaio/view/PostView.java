@@ -1,5 +1,11 @@
 package com.tunix70.javaio.view;
 
-public class PostView {
+import com.tunix70.javaio.controller.PostController;
 
+public class PostView {
+        private PostController postController = new PostController();
+
+    public void runner(){
+        System.out.println("pp");
+    }
 }

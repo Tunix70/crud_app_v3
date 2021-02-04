@@ -8,8 +8,10 @@ import com.tunix70.javaio.model.Region;
 import java.util.Scanner;
 
 public class ConsoleView {
-        private RegionView regionView = new RegionView();
-       public Scanner scanner;
+    private RegionView regionView = new RegionView();
+    private UserView userView = new UserView();
+    private PostView postView = new PostView();
+       private Scanner scanner;
 
        public void startApp(){
            mainMenu();
@@ -30,15 +32,16 @@ public class ConsoleView {
                input = scanner.nextLine();
                if(input.equals("1")){
                    regionView.runner();
-                   continue;
+                   break;
                }else if(input.equals("2")){
-                   regionView.runner();
-                   continue;
+                   postView.runner();
+                   break;
                }else if(input.equals("3")){
-                   regionView.runner();
-                   continue;
+                   userView.runner();
+                   break;
                }else if(input.equals("4")){
-                   System.out.println("Thanks for using our program");
+                   System.out.println("*** Thanks for using our program ***");
+                   break;
                }else{
                    System.out.println("Please, enter numbers from 1 to 4");
                    mainMenu();
