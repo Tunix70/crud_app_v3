@@ -88,7 +88,7 @@ public class JavaIORegionRepositoryImpl implements RegionRepository {
     }
 
     public Long generateByID() {
-        if(!getAll().isEmpty()){
+        if(getAll() != null){
             return getAll().stream()
                     .skip(getAll().size()-1)
                     .findFirst().get().getId()+1;

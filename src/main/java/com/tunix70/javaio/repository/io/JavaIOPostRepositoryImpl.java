@@ -3,7 +3,6 @@ package com.tunix70.javaio.repository.io;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.tunix70.javaio.model.Post;
-import com.tunix70.javaio.model.Region;
 import com.tunix70.javaio.repository.PostRepository;
 
 import java.io.*;
@@ -13,7 +12,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class JavaIOPostRepositoryImpl implements PostRepository {
-    private final String postFile = "C:\\Users\\Konstantin\\IdeaProjects\\CRUDapp_new\\src\\main\\resources\\files\\post.json";
+    private final String postFile = "C:\\Users\\Konstantin\\IdeaProjects\\CRUDapp_new\\src\\main\\resources\\files\\posts.json";
     private static final Gson gson = new Gson();
     private Long date = new Date().getTime();
 
@@ -34,6 +33,8 @@ public class JavaIOPostRepositoryImpl implements PostRepository {
     public Post save(Post post) {
         if(post.getId() == null){
             post.setId(generateByID());
+            post.setCreated(date);
+            post.setUpdated(date);
             List<Post> newPostList = getAll();
             newPostList.add(post);
             writeFile(newPostList, postFile);
@@ -48,8 +49,7 @@ public class JavaIOPostRepositoryImpl implements PostRepository {
         posts.stream().peek(s -> {
             if (s.getId().equals(post.getId()))
                 s.setContent(post.getContent());
-                s.setCreated(post.getCreated());
-                s.setUpdated(post.getUpdated());
+                s.setUpdated(date);
         }).collect(Collectors.toList());
         writeFile(posts, postFile);
         return post;
@@ -91,7 +91,7 @@ public class JavaIOPostRepositoryImpl implements PostRepository {
     }
 
     public Long generateByID() {
-        if(!getAll().isEmpty()){
+        if(getAll() != null){
             return getAll().stream()
                     .skip(getAll().size()-1)
                     .findFirst().get().getId()+1;
