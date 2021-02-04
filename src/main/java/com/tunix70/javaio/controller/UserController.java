@@ -2,12 +2,12 @@ package com.tunix70.javaio.controller;
 
 import com.tunix70.javaio.model.User;
 import com.tunix70.javaio.repository.UserRepository;
-import com.tunix70.javaio.repository.io.JavaIOUserRepositoryImpl;
+import com.tunix70.javaio.repository.ioJson.JsonUserRepositoryImpl;
 
 import java.util.List;
 
 public class UserController {
-    private UserRepository userRepository = new JavaIOUserRepositoryImpl();
+    private UserRepository userRepository = new JsonUserRepositoryImpl();
 
     public List<User> getAll(){
         return userRepository.getAll();

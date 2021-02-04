@@ -1,4 +1,4 @@
-package com.tunix70.javaio.repository.io;
+package com.tunix70.javaio.repository.ioJson;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -12,7 +12,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class JavaIOPostRepositoryImpl implements PostRepository {
+public class JsonPostRepositoryImpl implements PostRepository {
     private final String postFile = "C:\\Users\\Konstantin\\IdeaProjects\\CRUDapp_new\\src\\main\\resources\\files\\posts.json";
     private static final Gson gson = new Gson();
     private Long date = new Date().getTime();

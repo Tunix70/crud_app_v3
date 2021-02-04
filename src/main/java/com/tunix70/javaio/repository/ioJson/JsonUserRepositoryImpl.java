@@ -1,8 +1,7 @@
-package com.tunix70.javaio.repository.io;
+package com.tunix70.javaio.repository.ioJson;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.tunix70.javaio.model.Post;
 import com.tunix70.javaio.model.User;
 import com.tunix70.javaio.repository.UserRepository;
 
@@ -12,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class JavaIOUserRepositoryImpl implements UserRepository {
+public class JsonUserRepositoryImpl implements UserRepository {
     private final String userFile = "C:\\Users\\Konstantin\\IdeaProjects\\CRUDapp_new\\src\\main\\resources\\files\\users.json";
     private static final Gson gson = new Gson();
 
