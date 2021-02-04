@@ -34,6 +34,9 @@ public class JavaIORegionRepositoryImpl implements RegionRepository {
         if(region.getId() == null){
             region.setId(generateByID());
             List<Region> newRegionList = getAll();
+            if(newRegionList == null){
+                newRegionList = new ArrayList<>();
+            }
             newRegionList.add(region);
             writeFile(newRegionList, regionFile);
         }
@@ -61,20 +64,22 @@ public class JavaIORegionRepositoryImpl implements RegionRepository {
     }
 
     public List<Region> readFile(String file) {
+        List<Region> list = new ArrayList<>();
+        String st;
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
-            String st = br.readLine();
+            st = br.readLine();
             String jsonFile = "";
             while (st != null) {
                 jsonFile += st;
                 st = br.readLine();
             }
             Type listRegion = new TypeToken<List<Region>>() {}.getType();
-            List<Region> list = gson.fromJson(jsonFile, listRegion);
-            return list;
+            list = gson.fromJson(jsonFile, listRegion);
+
         }catch (IOException e){
             System.out.println("Файл не читается" + e);
-            return null;
         }
+        return list;
     }
 
     public void writeFile(List<Region> region, String file){

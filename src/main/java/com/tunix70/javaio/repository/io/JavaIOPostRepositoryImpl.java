@@ -7,6 +7,7 @@ import com.tunix70.javaio.repository.PostRepository;
 
 import java.io.*;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -36,6 +37,9 @@ public class JavaIOPostRepositoryImpl implements PostRepository {
             post.setCreated(date);
             post.setUpdated(date);
             List<Post> newPostList = getAll();
+            if(newPostList == null){
+                newPostList = new ArrayList<>();
+            }
             newPostList.add(post);
             writeFile(newPostList, postFile);
         }

@@ -8,6 +8,7 @@ import com.tunix70.javaio.repository.UserRepository;
 
 import java.io.*;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,6 +34,9 @@ public class JavaIOUserRepositoryImpl implements UserRepository {
         if(user.getId() == null){
             user.setId(generateByID());
             List<User> newUserList = getAll();
+            if(newUserList == null){
+                newUserList = new ArrayList<>();
+            }
             newUserList.add(user);
             writeFile(newUserList, userFile);
         }
