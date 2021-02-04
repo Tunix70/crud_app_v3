@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class JsonPostRepositoryImpl implements PostRepository {
-    private final String postFile = "C:\\Users\\Konstantin\\IdeaProjects\\CRUDapp_new\\src\\main\\resources\\files\\posts.json";
+    private final String postFile = "files/posts.json";
     private static final Gson gson = new Gson();
     private Long date = new Date().getTime();
 
@@ -79,7 +79,7 @@ public class JsonPostRepositoryImpl implements PostRepository {
             List<Post> list = gson.fromJson(jsonFile, listPost);
             return list;
         }catch (IOException e){
-            System.out.println("Файл не читается" + e);
+            System.out.println("Problem to read file: " + e);
             return null;
         }
     }

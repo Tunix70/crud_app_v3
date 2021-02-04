@@ -1,12 +1,12 @@
 package com.tunix70.javaio.view;
 
 import com.tunix70.javaio.controller.RegionController;
+import com.tunix70.javaio.model.Region;
 
 import java.util.Scanner;
 
 public class RegionView {
         private final RegionController regionController = new RegionController();
-        public ConsoleView consoleView = new ConsoleView();
         private Scanner scanner;
 
         public void runner(){
@@ -27,13 +27,19 @@ public class RegionView {
                 while (true){
                         input = scanner.nextLine();
                         if(input.equals("1")){
-                                regionView.runner();
+                                System.out.println("Enter new name Region");
+                                String name = scanner.nextLine();
+                                regionController.save(new Region(null, name));
+                                System.out.println("New Region successfully entered");
+                                runner();
                                 break;
                         }else if(input.equals("2")){
                                 regionController.getAll();
+                                runner();
                                 break;
                         }else if(input.equals("3")){
-                                userView.runner();
+                                enterPick();
+                                regionController.getById(enterPick());
                                 break;
                         }else if(input.equals("4")){
                                 System.out.println("*** Thanks for using our program ***");
@@ -43,5 +49,10 @@ public class RegionView {
                                 menu();
                         }
                 }
+        }
+
+        private Long enterPick(){
+                System.out.println("Enter ");
+                return null;
         }
 }

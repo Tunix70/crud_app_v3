@@ -18,7 +18,7 @@ public class ConsoleView {
            selectMenu();
        }
 
-       private void mainMenu(){
+       public static void mainMenu(){
            System.out.println("*** MAIN MENU ***");
            System.out.println(" ================================= ");
            System.out.println("Choose next action:");
@@ -31,13 +31,13 @@ public class ConsoleView {
            while (true){
                input = scanner.nextLine();
                if(input.equals("1")){
-                   regionView.runner();
+                   userView.runner();
                    break;
                }else if(input.equals("2")){
                    postView.runner();
                    break;
                }else if(input.equals("3")){
-                   userView.runner();
+                   regionView.runner();
                    break;
                }else if(input.equals("4")){
                    System.out.println("*** Thanks for using our program ***");
