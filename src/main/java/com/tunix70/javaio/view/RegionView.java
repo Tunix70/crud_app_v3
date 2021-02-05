@@ -53,7 +53,7 @@ public class RegionView {
                                 runner();
                                 break;
                         }else if(input.equals("5")){
-                                System.out.println("Enter the Region number");
+                                System.out.println("Enter the Region number to delete");
                                 Long num = Long.parseLong(scanner.nextLine());
                                 System.out.println(regionController.getById(num));
                                 runner();
