@@ -35,7 +35,7 @@ public class PostView {
                     runner();
                     break;
                 } else if (input.equals("2")) {
-                    postController.getAll();
+                    System.out.println(postController.getAll());
                     runner();
                     break;
                 } else if (input.equals("3")) {

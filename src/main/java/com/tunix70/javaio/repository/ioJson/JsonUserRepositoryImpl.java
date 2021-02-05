@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class JsonUserRepositoryImpl implements UserRepository {
-    private final String userFile = "files/users.json";
+    private final String userFile = "src/main/resources/files/users.json";
     private static final Gson gson = new Gson();
 
     @Override

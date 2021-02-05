@@ -34,7 +34,7 @@ public class RegionView {
                                 runner();
                                 break;
                         }else if(input.equals("2")){
-                                regionController.getAll();
+                                System.out.println(regionController.getAll());
                                 runner();
                                 break;
                         }else if(input.equals("3")){
@@ -46,10 +46,16 @@ public class RegionView {
                         }else if(input.equals("4")){
                                 System.out.println("Enter the Region number, which will be updated");
                                 Long num = Long.parseLong(scanner.nextLine());
-                                System.out.println("Enter the name new Region");
-                                String newName = scanner.nextLine();
-                                regionController.update(new Region(num, newName));
-                                System.out.println("Region successfully updated");
+//написать отдельные методы для подтверждения региона и поста
+                                if(num != null) {
+                                        System.out.println("Enter the name new Region");
+                                        String newName = scanner.nextLine();
+                                        regionController.update(new Region(num, newName));
+                                        System.out.println("Region successfully updated");
+                                }else {
+                                        System.out.println("Region is not found, please enter existing Region");
+                                }
+
                                 runner();
                                 break;
                         }else if(input.equals("5")){

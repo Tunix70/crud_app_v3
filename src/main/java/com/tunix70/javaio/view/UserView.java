@@ -41,7 +41,7 @@ public class UserView {
                     runner();
                     break;
                 } else if (input.equals("2")) {
-                    userController.getAll();
+                    System.out.println(userController.getAll());
                     runner();
                     break;
                 } else if (input.equals("3")) {
@@ -72,21 +72,14 @@ public class UserView {
         }
 
         private User createNewUser() {
-            PostController postController = new PostController();
-            RegionController regionController = new RegionController();
-
             System.out.println("Enter first name User");
             String firstName = selectName();
 
             System.out.println("Enter last name User");
             String lastName = selectName();
 
-            System.out.println(postController.getAll());
             List<Post> postList = selectPost();
-
-            System.out.println(regionController.getAll());
             Region region = selectRegion();
-
             Role userRole = selectRole();
 
             User newUser = new User(null, firstName, lastName, postList, region, userRole);
@@ -97,38 +90,43 @@ public class UserView {
             System.out.println("Enter the User number, which will be updated");
             Long num = Long.parseLong(scanner.nextLine());
             User editUser = userController.getById(num);
-            System.out.println("Which parameter do you want to update:\n" +
-                    "1. Update first name\n" +
-                    "2. Update last name\n" +
-                    "3. Update Post list\n" +
-                    "4. Update Region\n" +
-                    "5. Update Role" +
-                    "6. Return");
+                if(editUser != null){
+                    System.out.println("Which parameter do you want to update:\n" +
+                            "1. Update first name\n" +
+                            "2. Update last name\n" +
+                            "3. Update Post list\n" +
+                            "4. Update Region\n" +
+                            "5. Update Role\n" +
+                            "6. Return");
 
-            Long input = Long.parseLong(scanner.nextLine());
-             while(true) {
-                if (input == 1) {
-                    System.out.println("Enter first name User");
-                    editUser.setFirstName(selectName());
-                    break;
-                } else if (input == 2) {
-                    System.out.println("Enter first name User");
-                    editUser.setLastName(selectName());
-                    break;
-                } else if (input == 3) {
-                    editUser.setPost(selectPost());
-                    break;
-                } else if (input == 4) {
-                    editUser.setRegion(selectRegion());
-                    break;
-                } else if (input == 5) {
-                    editUser.setRole(selectRole());
-                    break;
-                } else if (input == 6) {
-                    selectMenu();
-                    break;
-                } else System.out.println("Please, enter numbers from 1 to 6");
-            }
+                    Long input = Long.parseLong(scanner.nextLine());
+                     while(true) {
+                        if (input == 1) {
+                            System.out.println("Enter first name User");
+                            editUser.setFirstName(selectName());
+                            break;
+                        } else if (input == 2) {
+                            System.out.println("Enter first name User");
+                            editUser.setLastName(selectName());
+                            break;
+                        } else if (input == 3) {
+                            editUser.setPost(selectPost());
+                            break;
+                        } else if (input == 4) {
+                            editUser.setRegion(selectRegion());
+                            break;
+                        } else if (input == 5) {
+                            editUser.setRole(selectRole());
+                            break;
+                        } else if (input == 6) {
+                            selectMenu();
+                        } else System.out.println("Please, enter numbers from 1 to 6");
+                    }
+                }else {
+                    System.out.println("User is not found");
+                    updateUser();
+                }
+
              return editUser;
         }
 
@@ -156,6 +154,7 @@ public class UserView {
 
         private Region selectRegion(){
             System.out.println("Enter the number of Region");
+            System.out.println(regionController.getAll());
             Long inputRegion = Long.parseLong(scanner.nextLine());
             Region region = regionController.getById(inputRegion);
             return region;

@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class JsonPostRepositoryImpl implements PostRepository {
-    private final String postFile = "files/posts.json";
+    private final String postFile = "src/main/resources/files/posts.json";
     private static final Gson gson = new Gson();
     private Long date = new Date().getTime();
 
