@@ -15,7 +15,7 @@ public class RegionView {
         }
 
         private void menu(){
-                System.out.println("*** REGION MENU ***");
+                System.out.println("\n*** REGION MENU ***");
                 System.out.println(" ================================= ");
                 System.out.println("Choose next action:");
                 System.out.println("1. CREATE\n2. READ ALL\n3. READ BY ID\n4. UPDATE\n5. DELETE\n6. RETURN");
@@ -38,21 +38,33 @@ public class RegionView {
                                 runner();
                                 break;
                         }else if(input.equals("3")){
-                                enterPick();
-                                regionController.getById(enterPick());
+                                System.out.println("Enter the Region number");
+                                Long num = Long.parseLong(scanner.nextLine());
+                                System.out.println(regionController.getById(num));
+                                runner();
                                 break;
                         }else if(input.equals("4")){
-                                System.out.println("*** Thanks for using our program ***");
+                                System.out.println("Enter the Region number, which will be updated");
+                                Long num = Long.parseLong(scanner.nextLine());
+                                System.out.println("Enter the name new Region");
+                                String newName = scanner.nextLine();
+                                regionController.update(new Region(num, newName));
+                                System.out.println("Region successfully updated");
+                                runner();
+                                break;
+                        }else if(input.equals("5")){
+                                System.out.println("Enter the Region number");
+                                Long num = Long.parseLong(scanner.nextLine());
+                                System.out.println(regionController.getById(num));
+                                runner();
+                                break;
+                        }else if(input.equals("6")){
+                                ConsoleView.mainMenu();
                                 break;
                         }else{
-                                System.out.println("Please, enter numbers from 1 to 4");
+                                System.out.println("Please, enter numbers from 1 to 6");
                                 menu();
                         }
                 }
-        }
-
-        private Long enterPick(){
-                System.out.println("Enter ");
-                return null;
         }
 }

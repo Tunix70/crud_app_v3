@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 
 public class JsonRegionRepositoryImpl implements RegionRepository {
-    private final String regionFile = "files/regions.json";
+    private final String regionFile = "C:\\Users\\Konstantin\\IdeaProjects\\CRUDapp_new\\src\\main\\resources\\files\\regions.json";
     private static final Gson gson = new Gson();
 
     @Override

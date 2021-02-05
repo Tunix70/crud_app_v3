@@ -19,7 +19,7 @@ public class ConsoleView {
        }
 
        public static void mainMenu(){
-           System.out.println("*** MAIN MENU ***");
+           System.out.println("\n*** MAIN MENU ***");
            System.out.println(" ================================= ");
            System.out.println("Choose next action:");
            System.out.println("1. USER\n2. POST\n3. REGION\n4. EXIT");
