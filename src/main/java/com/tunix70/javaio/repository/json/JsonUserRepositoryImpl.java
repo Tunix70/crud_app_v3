@@ -1,4 +1,4 @@
-package com.tunix70.javaio.repository.ioJson;
+package com.tunix70.javaio.repository.json;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;

@@ -2,7 +2,7 @@ package com.tunix70.javaio.controller;
 
 import com.tunix70.javaio.model.Region;
 import com.tunix70.javaio.repository.RegionRepository;
-import com.tunix70.javaio.repository.ioJson.JsonRegionRepositoryImpl;
+import com.tunix70.javaio.repository.json.JsonRegionRepositoryImpl;
 
 import java.util.List;
 

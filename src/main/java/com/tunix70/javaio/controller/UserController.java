@@ -2,7 +2,7 @@ package com.tunix70.javaio.controller;
 
 import com.tunix70.javaio.model.User;
 import com.tunix70.javaio.repository.UserRepository;
-import com.tunix70.javaio.repository.ioJson.JsonUserRepositoryImpl;
+import com.tunix70.javaio.repository.json.JsonUserRepositoryImpl;
 
 import java.util.List;
 

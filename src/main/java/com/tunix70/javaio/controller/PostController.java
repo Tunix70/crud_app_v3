@@ -2,7 +2,7 @@ package com.tunix70.javaio.controller;
 
 import com.tunix70.javaio.model.Post;
 import com.tunix70.javaio.repository.PostRepository;
-import com.tunix70.javaio.repository.ioJson.JsonPostRepositoryImpl;
+import com.tunix70.javaio.repository.json.JsonPostRepositoryImpl;
 
 import java.util.List;
 
