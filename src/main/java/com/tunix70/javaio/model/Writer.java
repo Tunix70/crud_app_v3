@@ -2,24 +2,23 @@ package com.tunix70.javaio.model;
 
 import java.util.List;
 
-public class User {
+public class Writer {
 
     private Long id;
     private String firstName;
     private String lastName;
     private List<Post> post;
     private Region region;
-    private Role role;
 
-    public User(){}
 
-    public User(Long id, String firstName, String lastName, List<Post> post, Region region, Role role) {
+    public Writer(){}
+
+    public Writer(Long id, String firstName, String lastName, List<Post> post, Region region) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.post = post;
         this.region = region;
-        this.role = role;
     }
 
     public Long getId() {
@@ -62,13 +61,7 @@ public class User {
         this.region = region;
     }
 
-    public Role getRole() {
-        return role;
-    }
 
-    public void setRole(Role role) {
-        this.role = role;
-    }
 
     @Override
     public String toString() {
@@ -78,7 +71,6 @@ public class User {
                 ", lastName='" + lastName + '\'' +
                 ", post=" + post +
                 ", region=" + region +
-                ", role=" + role +
                 '}';
     }
 }

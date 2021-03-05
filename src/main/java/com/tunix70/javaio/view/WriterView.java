@@ -2,18 +2,18 @@ package com.tunix70.javaio.view;
 
 import com.tunix70.javaio.controller.PostController;
 import com.tunix70.javaio.controller.RegionController;
-import com.tunix70.javaio.controller.UserController;
+import com.tunix70.javaio.controller.WriterController;
 import com.tunix70.javaio.model.Post;
 import com.tunix70.javaio.model.Region;
-import com.tunix70.javaio.model.Role;
-import com.tunix70.javaio.model.User;
+import com.tunix70.javaio.model.PostStatus;
+import com.tunix70.javaio.model.Writer;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class UserView {
-        private UserController userController = new UserController();
+public class WriterView {
+        private WriterController writerController = new WriterController();
         private PostController postController = new PostController();
         private RegionController regionController = new RegionController();
         private Scanner scanner;
@@ -36,29 +36,29 @@ public class UserView {
             while (true) {
                 input = scanner.nextLine();
                 if (input.equals("1")) {
-                    userController.save(createNewUser());
+                    writerController.save(createNewUser());
                     System.out.println("New Post successfully entered");
                     runner();
                     break;
                 } else if (input.equals("2")) {
-                    System.out.println(userController.getAll());
+                    System.out.println(writerController.getAll());
                     runner();
                     break;
                 } else if (input.equals("3")) {
                     System.out.println("Enter the User number");
                     Long num = Long.parseLong(scanner.nextLine());
-                    System.out.println(userController.getById(num));
+                    System.out.println(writerController.getById(num));
                     runner();
                     break;
                 } else if (input.equals("4")) {
-                    userController.update(updateUser());
+                    writerController.update(updateUser());
                     System.out.println("User successfully updated");
                     runner();
                     break;
                 } else if (input.equals("5")) {
                     System.out.println("Enter the User number to delete");
                     Long num = Long.parseLong(scanner.nextLine());
-                    System.out.println(userController.getById(num));
+                    System.out.println(writerController.getById(num));
                     runner();
                     break;
                 } else if (input.equals("6")) {
@@ -71,7 +71,7 @@ public class UserView {
             }
         }
 
-        private User createNewUser() {
+        private Writer createNewUser() {
             System.out.println("Enter first name User");
             String firstName = selectName();
 
@@ -80,17 +80,17 @@ public class UserView {
 
             List<Post> postList = selectPost();
             Region region = selectRegion();
-            Role userRole = selectRole();
+            PostStatus userPostStatus = selectRole();
 
-            User newUser = new User(null, firstName, lastName, postList, region, userRole);
-            return newUser;
+            Writer newWriter = new Writer(null, firstName, lastName, postList, region, userPostStatus);
+            return newWriter;
         }
 
-        private User updateUser(){
+        private Writer updateUser(){
             System.out.println("Enter the User number, which will be updated");
             Long num = Long.parseLong(scanner.nextLine());
-            User editUser = userController.getById(num);
-                if(editUser != null){
+            Writer editWriter = writerController.getById(num);
+                if(editWriter != null){
                     System.out.println("Which parameter do you want to update:\n" +
                             "1. Update first name\n" +
                             "2. Update last name\n" +
@@ -103,20 +103,20 @@ public class UserView {
                      while(true) {
                         if (input == 1) {
                             System.out.println("Enter first name User");
-                            editUser.setFirstName(selectName());
+                            editWriter.setFirstName(selectName());
                             break;
                         } else if (input == 2) {
                             System.out.println("Enter first name User");
-                            editUser.setLastName(selectName());
+                            editWriter.setLastName(selectName());
                             break;
                         } else if (input == 3) {
-                            editUser.setPost(selectPost());
+                            editWriter.setPost(selectPost());
                             break;
                         } else if (input == 4) {
-                            editUser.setRegion(selectRegion());
+                            editWriter.setRegion(selectRegion());
                             break;
                         } else if (input == 5) {
-                            editUser.setRole(selectRole());
+                            editWriter.setRole(selectRole());
                             break;
                         } else if (input == 6) {
                             selectMenu();
@@ -127,7 +127,7 @@ public class UserView {
                     updateUser();
                 }
 
-             return editUser;
+             return editWriter;
         }
 
         private String selectName(){
@@ -160,26 +160,26 @@ public class UserView {
             return region;
         }
 
-        private Role selectRole(){
+        private PostStatus selectRole(){
             System.out.println("Enter the number of Role");
             System.out.println(
                     "1.    ADMIN,\n" +
                     "2.    MODERATOR,\n" +
                     "3.    USER");
             Long inputRole = Long.parseLong(scanner.nextLine());
-            Role userRole;
+            PostStatus userPostStatus;
             while(true) {
                 if (inputRole == 1) {
-                    userRole = Role.ADMIN;
+                    userPostStatus = PostStatus.ADMIN;
                     break;
                 } else if (inputRole == 2) {
-                    userRole = Role.MODERATOR;
+                    userPostStatus = PostStatus.MODERATOR;
                     break;
                 } else if (inputRole == 3) {
-                    userRole = Role.USER;
+                    userPostStatus = PostStatus.USER;
                     break;
                 } else System.out.println("Please, enter numbers from 1 to 3");
             }
-            return userRole;
+            return userPostStatus;
         }
     }

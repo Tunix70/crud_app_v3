@@ -1,15 +1,10 @@
 package com.tunix70.javaio.view;
 
-import com.tunix70.javaio.controller.PostController;
-import com.tunix70.javaio.controller.RegionController;
-import com.tunix70.javaio.controller.UserController;
-import com.tunix70.javaio.model.Region;
-
 import java.util.Scanner;
 
 public class ConsoleView {
     private RegionView regionView = new RegionView();
-    private UserView userView = new UserView();
+    private WriterView writerView = new WriterView();
     private PostView postView = new PostView();
        private Scanner scanner;
 
@@ -31,7 +26,7 @@ public class ConsoleView {
            while (true){
                input = scanner.nextLine();
                if(input.equals("1")){
-                   userView.runner();
+                   writerView.runner();
                    break;
                }else if(input.equals("2")){
                    postView.runner();

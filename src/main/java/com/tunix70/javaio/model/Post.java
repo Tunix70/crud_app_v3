@@ -5,15 +5,17 @@ public class Post {
     private String content;
     private Long created;
     private Long updated;
+    private PostStatus postStatus;
 
     public Post() {
     }
 
-    public Post(Long id, String content, Long created, Long updated) {
+    public Post(Long id, String content, Long created, Long updated, PostStatus postStatus) {
         this.id = id;
         this.content = content;
         this.created = created;
         this.updated = updated;
+        this.postStatus = postStatus;
     }
 
     public Long getId() {
@@ -48,6 +50,14 @@ public class Post {
         this.updated = updated;
     }
 
+    public PostStatus getPostStatus() {
+        return postStatus;
+    }
+
+    public void setPostStatus(PostStatus postStatus) {
+        this.postStatus = postStatus;
+    }
+
     @Override
     public String toString() {
         return "Post{" +
@@ -55,6 +65,7 @@ public class Post {
                 ", content='" + content + '\'' +
                 ", created=" + created +
                 ", updated=" + updated +
+                ", postStatus=" + postStatus +
                 '}';
     }
 }
