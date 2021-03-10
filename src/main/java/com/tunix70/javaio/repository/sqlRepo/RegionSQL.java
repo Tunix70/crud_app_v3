@@ -36,12 +36,18 @@ public class RegionSQL implements RegionRepository {
 
     @Override
     public Region update(Region region) {
-        String SQLUpdate = "UPDATE region SET name = " + region.getName() + " WHERE id = " + region.getId();
+        String SQLUpdate = "UPDATE region SET name = '" + region.getName() + "' WHERE id = " + region.getId();
         try{
             statement = connection.createStatement();
             statement.execute(SQLUpdate);
         }catch (SQLException e){
             e.printStackTrace();
+        }finally {
+            try {
+                statement.close();
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
         }
         return region;
     }
@@ -54,6 +60,12 @@ public class RegionSQL implements RegionRepository {
             statement.execute(SQLdeleteById);
         }catch (SQLException e){
             e.printStackTrace();
+        }finally {
+            try {
+                statement.close();
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
         }
     }
 
@@ -71,6 +83,12 @@ public class RegionSQL implements RegionRepository {
             }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
+        }finally {
+            try {
+                statement.close();
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
         }
         return regionList;
     }
@@ -82,6 +100,12 @@ public class RegionSQL implements RegionRepository {
             statement.executeUpdate(SQLadd);
         }catch (SQLException e){
             e.printStackTrace();
+        }finally {
+            try {
+                statement.close();
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
         }
     }
 }
