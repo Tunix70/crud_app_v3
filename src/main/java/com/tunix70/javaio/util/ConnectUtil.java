@@ -5,7 +5,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class ConnectUtil {
-    private ConnectUtil connectUtil = null;
+    public static ConnectUtil connectUtil = null;
     private String DATABASE_URL = "jdbc:mysql://localhost:3306/crud";
     private String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";
     private String USER = "root";
@@ -20,11 +20,18 @@ public class ConnectUtil {
         }catch (SQLException e){
             System.out.println("Ошибка SQL");
         }catch (ClassNotFoundException e){
-            System.out.println("Класс не найден");
+            e.printStackTrace();
         }
     }
 
-    public static ConnectUtil getInstance() {
+    public static ConnectUtil getInstance(){
+        if(connectUtil ==null){
+            connectUtil = new ConnectUtil();
+        }
+        return connectUtil;
+    }
 
+    public Connection getConnection() {
+        return connection;
     }
 }

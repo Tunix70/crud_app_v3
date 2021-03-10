@@ -2,12 +2,12 @@ package com.tunix70.javaio.controller;
 
 import com.tunix70.javaio.model.Region;
 import com.tunix70.javaio.repository.RegionRepository;
-import com.tunix70.javaio.repository.json.JsonRegionRepositoryImpl;
+import com.tunix70.javaio.repository.sqlRepo.RegionSQL;
 
 import java.util.List;
 
 public class RegionController {
-    private RegionRepository regionRepository = new JsonRegionRepositoryImpl();
+    private RegionRepository regionRepository = new RegionSQL();
 
     public List<Region> getAll(){
         return regionRepository.getAll();
@@ -25,3 +25,5 @@ public class RegionController {
         regionRepository.deleteById(id);
     }
 }
+
+
