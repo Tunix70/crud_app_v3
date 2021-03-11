@@ -2,12 +2,12 @@ package com.tunix70.javaio.controller;
 
 import com.tunix70.javaio.model.Region;
 import com.tunix70.javaio.repository.RegionRepository;
-import com.tunix70.javaio.repository.sqlRepo.RegionSQL;
+import com.tunix70.javaio.repository.JDBC.JDBCRegionRepositoryImpl;
 
 import java.util.List;
 
 public class RegionController {
-    private RegionRepository regionRepository = new RegionSQL();
+    private RegionRepository regionRepository = new JDBCRegionRepositoryImpl();
 
     public List<Region> getAll(){
         return regionRepository.getAll();

@@ -1,13 +1,9 @@
 package com.tunix70.javaio;
 
 import com.tunix70.javaio.model.Region;
-import com.tunix70.javaio.repository.sqlRepo.RegionSQL;
-import com.tunix70.javaio.util.ConnectUtil;
+import com.tunix70.javaio.repository.JDBC.JDBCRegionRepositoryImpl;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 
 public class Runner {
@@ -15,8 +11,8 @@ public class Runner {
 //        ConsoleView consoleView = new ConsoleView();
 //        consoleView.startApp();
 
-        RegionSQL rs = new RegionSQL();
-        rs.update(new Region(3l, "eu"));
+        JDBCRegionRepositoryImpl rs = new JDBCRegionRepositoryImpl();
+        System.out.println(rs.sqlReader());
 
     }
 }

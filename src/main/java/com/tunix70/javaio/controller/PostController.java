@@ -1,13 +1,13 @@
 package com.tunix70.javaio.controller;
 
 import com.tunix70.javaio.model.Post;
+import com.tunix70.javaio.repository.JDBC.JDBCPostRepositoryImpl;
 import com.tunix70.javaio.repository.PostRepository;
-import com.tunix70.javaio.repository.json.JsonPostRepositoryImpl;
 
 import java.util.List;
 
 public class PostController {
-    private PostRepository postRepository = new JsonPostRepositoryImpl();
+    private PostRepository postRepository = new JDBCPostRepositoryImpl();
 
     public List<Post> getAll(){
         return postRepository.getAll();

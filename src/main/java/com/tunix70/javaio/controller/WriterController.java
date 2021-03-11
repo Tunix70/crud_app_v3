@@ -1,13 +1,14 @@
 package com.tunix70.javaio.controller;
 
 import com.tunix70.javaio.model.Writer;
+import com.tunix70.javaio.repository.JDBC.JDBCWriterRepositoryImpl;
 import com.tunix70.javaio.repository.WriterRepository;
-import com.tunix70.javaio.repository.json.JsonWriterRepositoryImpl;
+
 
 import java.util.List;
 
 public class WriterController {
-    private WriterRepository writerRepository = new JsonWriterRepositoryImpl();
+    private WriterRepository writerRepository = new JDBCWriterRepositoryImpl();
 
     public List<Writer> getAll(){
         return writerRepository.getAll();
