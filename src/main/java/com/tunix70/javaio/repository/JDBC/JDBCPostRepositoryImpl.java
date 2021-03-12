@@ -13,16 +13,24 @@ import java.util.Date;
 import java.util.List;
 
 public class JDBCPostRepositoryImpl implements PostRepository {
-    private final String SQLUpdate = "UPDATE post SET content = '%s',updated = '%s', postStatusID = '%d'  WHERE id = %d";
-    private final String SQLdeleteById = "DELETE FROM post WHERE id LIKE %d";
+    private final String SQLUpdate = "UPDATE post SET content = '%s',updated = '%s', post_status = '%s'  WHERE id = %d";
+    private final String SQLdeleteById = "DELETE FROM post WHERE id = %d";
     private final String SQLread = "SELECT * FROM post";
-    private final String SQLadd = "INSERT INTO post (content, created, updated, postStatusID) VALUES ('%s', '%s', '%s', '%d')";
+    private final String SQLadd = "INSERT INTO post (content, created, updated, post_status) VALUES ('%s', '%s', '%s', '%s')";
 
     private Connection connection = ConnectUtil.getInstance().getConnection();
+    private Long date = new Date().getTime();
 
     @Override
     public List<Post> getAll() {
-        return sqlReader();
+        List<Post> listpost = new ArrayList<>();
+        try (Statement statement = connection.createStatement()) {
+            ResultSet resultSet = statement.executeQuery(SQLread);
+            listpost = getPostFromSQL(resultSet);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return listpost;
     }
 
     @Override
@@ -36,8 +44,8 @@ public class JDBCPostRepositoryImpl implements PostRepository {
     @Override
     public Post save(Post post) {
         try (Statement statement = connection.createStatement()) {
-            statement.executeUpdate(String.format(SQLadd, post.getContent(),  getTimeStamp(post.getCreated()),
-                    getTimeStamp(post.getUpdated()), getIntegerPostStatus(post.getPostStatus())));
+            statement.executeUpdate(String.format(SQLadd, post.getContent(),  getTimeStamp(date),
+                    getTimeStamp(date), post.getPostStatus()));
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -47,8 +55,8 @@ public class JDBCPostRepositoryImpl implements PostRepository {
     @Override
     public Post update(Post post) {
         try (Statement statement = connection.createStatement()) {
-            statement.execute(String.format(SQLUpdate, post.getContent(), getTimeStamp(post.getUpdated()),
-                    getIntegerPostStatus(post.getPostStatus()), post.getId()));
+            statement.execute(String.format(SQLUpdate, post.getContent(), getTimeStamp(date),
+                    post.getPostStatus(), post.getId()));
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -64,17 +72,6 @@ public class JDBCPostRepositoryImpl implements PostRepository {
         }
     }
 
-    public List<Post> sqlReader() {
-        List<Post> listpost = new ArrayList<>();
-        try (Statement statement = connection.createStatement()) {
-            ResultSet resultSet = statement.executeQuery(SQLread);
-            listpost = getPostFromSQL(resultSet);
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-        return listpost;
-    }
-
     public List<Post> getPostFromSQL(ResultSet resultSet) {
         List<Post> postList = new ArrayList<>();
         try {
@@ -84,34 +81,13 @@ public class JDBCPostRepositoryImpl implements PostRepository {
                 post.setContent(resultSet.getString("content"));
                 post.setCreated(resultSet.getTimestamp("created").getTime());
                 post.setUpdated(resultSet.getTimestamp("updated").getTime());
-                post.setPostStatus(getPostStatus(resultSet.getInt("postStatusID")));
+                post.setPostStatus(PostStatus.valueOf(resultSet.getString("post_status")));
                 postList.add(post);
             }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
         return postList;
-    }
-
-    private PostStatus getPostStatus(Integer postStatusId) {
-        PostStatus postStatus = null;
-        if (postStatusId.equals(1) || postStatusId.equals("ACTIVE")) {
-            postStatus = PostStatus.ACTIVE;
-        }
-        if (postStatusId.equals(2) || postStatusId.equals("DELETED"))
-            postStatus = PostStatus.DELETED;
-        return postStatus;
-    }
-
-    private Integer getIntegerPostStatus(PostStatus postStatus) {
-        Integer postStatusId = null;
-        if (postStatus == PostStatus.ACTIVE) {
-            postStatusId = 1;
-        }
-        if (postStatus == PostStatus.DELETED) {
-            postStatusId = 2;
-        }
-        return postStatusId;
     }
 
     private Timestamp getTimeStamp(Long time){

@@ -10,7 +10,7 @@ public class Post {
     public Post() {
     }
 
-    public Post( String content, Long created, Long updated, PostStatus postStatus) {
+    public Post(String content, Long created, Long updated, PostStatus postStatus) {
         this.content = content;
         this.created = created;
         this.updated = updated;

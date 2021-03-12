@@ -13,7 +13,7 @@ import java.util.List;
 
 public class JDBCRegionRepositoryImpl implements RegionRepository {
     private final String SQLUpdate = "UPDATE region SET name = '%s' WHERE id = %d";
-    private final String SQLdeleteById = "DELETE FROM region WHERE id LIKE %d";
+    private final String SQLdeleteById = "DELETE FROM region WHERE id = %d";
     private final String SQLread = "SELECT * FROM region";
     private final String SQLadd = "INSERT INTO region (name) VALUES ('%s')";
 
@@ -21,7 +21,14 @@ public class JDBCRegionRepositoryImpl implements RegionRepository {
 
     @Override
     public List<Region> getAll() {
-        return sqlReader();
+        List<Region> listRegion= new ArrayList<>();
+        try (Statement statement = connection.createStatement()){
+            ResultSet resultSet = statement.executeQuery(SQLread);
+            listRegion = getRegionFromSQL(resultSet);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return listRegion;
     }
 
     @Override
@@ -59,17 +66,6 @@ public class JDBCRegionRepositoryImpl implements RegionRepository {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-    }
-
-    public List<Region> sqlReader() {
-        List<Region> listRegion= new ArrayList<>();
-        try (Statement statement = connection.createStatement()){
-              ResultSet resultSet = statement.executeQuery(SQLread);
-            listRegion = getRegionFromSQL(resultSet);
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-        return listRegion;
     }
 
     public List<Region> getRegionFromSQL(ResultSet resultSet) {

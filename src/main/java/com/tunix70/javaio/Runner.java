@@ -15,7 +15,7 @@ public class Runner {
 //        consoleView.startApp();
 
         JDBCPostRepositoryImpl pr = new JDBCPostRepositoryImpl();
-        System.out.println(pr.getAll());
+        pr.save(new Post("Text3", null, null, PostStatus.ACTIVE));
 
     }
 }
