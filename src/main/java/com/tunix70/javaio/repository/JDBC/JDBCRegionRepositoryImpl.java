@@ -34,7 +34,11 @@ public class JDBCRegionRepositoryImpl implements RegionRepository {
 
     @Override
     public Region save(Region region) {
-        sqlWriter(region);
+        try (Statement statement = connection.createStatement()){
+            statement.executeUpdate(String.format(SQLadd, region.getName()));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return region;
     }
 
@@ -66,14 +70,6 @@ public class JDBCRegionRepositoryImpl implements RegionRepository {
             throwables.printStackTrace();
         }
         return listRegion;
-    }
-
-    public void sqlWriter(Region region) {
-        try (Statement statement = connection.createStatement()){
-            statement.executeUpdate(String.format(SQLadd, region.getName()));
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
     }
 
     public List<Region> getRegionFromSQL(ResultSet resultSet) {

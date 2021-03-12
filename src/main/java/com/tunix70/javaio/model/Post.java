@@ -10,6 +10,13 @@ public class Post {
     public Post() {
     }
 
+    public Post( String content, Long created, Long updated, PostStatus postStatus) {
+        this.content = content;
+        this.created = created;
+        this.updated = updated;
+        this.postStatus = postStatus;
+    }
+
     public Post(Long id, String content, Long created, Long updated, PostStatus postStatus) {
         this.id = id;
         this.content = content;

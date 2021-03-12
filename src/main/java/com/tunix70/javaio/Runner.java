@@ -1,6 +1,9 @@
 package com.tunix70.javaio;
 
+import com.tunix70.javaio.model.Post;
+import com.tunix70.javaio.model.PostStatus;
 import com.tunix70.javaio.model.Region;
+import com.tunix70.javaio.repository.JDBC.JDBCPostRepositoryImpl;
 import com.tunix70.javaio.repository.JDBC.JDBCRegionRepositoryImpl;
 
 import java.sql.SQLException;
@@ -11,8 +14,8 @@ public class Runner {
 //        ConsoleView consoleView = new ConsoleView();
 //        consoleView.startApp();
 
-        JDBCRegionRepositoryImpl rs = new JDBCRegionRepositoryImpl();
-        System.out.println(rs.sqlReader());
+        JDBCPostRepositoryImpl pr = new JDBCPostRepositoryImpl();
+        System.out.println(pr.getAll());
 
     }
 }
