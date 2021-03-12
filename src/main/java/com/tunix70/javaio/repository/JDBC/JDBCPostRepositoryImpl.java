@@ -16,7 +16,8 @@ public class JDBCPostRepositoryImpl implements PostRepository {
     private final String SQLUpdate = "UPDATE post SET content = '%s',updated = '%s', post_status = '%s'  WHERE id = %d";
     private final String SQLdeleteById = "DELETE FROM post WHERE id = %d";
     private final String SQLread = "SELECT * FROM post";
-    private final String SQLadd = "INSERT INTO post (content, created, updated, post_status) VALUES ('%s', '%s', '%s', '%s')";
+    private final String SQLadd = "INSERT INTO post (id, content, created, updated, post_status)" +
+            " VALUES ('%d', '%s', '%s', '%s', '%s')";
 
     private Connection connection = ConnectUtil.getInstance().getConnection();
     private Long date = new Date().getTime();
@@ -44,7 +45,7 @@ public class JDBCPostRepositoryImpl implements PostRepository {
     @Override
     public Post save(Post post) {
         try (Statement statement = connection.createStatement()) {
-            statement.executeUpdate(String.format(SQLadd, post.getContent(),  getTimeStamp(date),
+            statement.executeUpdate(String.format(SQLadd, generateId(), post.getContent(),  getTimeStamp(date),
                     getTimeStamp(date), post.getPostStatus()));
         } catch (SQLException e) {
             e.printStackTrace();
@@ -92,5 +93,13 @@ public class JDBCPostRepositoryImpl implements PostRepository {
 
     private Timestamp getTimeStamp(Long time){
         return new Timestamp(time);
+    }
+    public Long generateId(){
+        if(getAll() != null){
+            return getAll().stream()
+                    .skip(getAll().size()-1)
+                    .findFirst().get().getId()+1;
+        }else
+            return 1l;
     }
 }

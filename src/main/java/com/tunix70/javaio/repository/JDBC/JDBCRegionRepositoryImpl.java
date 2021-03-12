@@ -15,7 +15,7 @@ public class JDBCRegionRepositoryImpl implements RegionRepository {
     private final String SQLUpdate = "UPDATE region SET name = '%s' WHERE id = %d";
     private final String SQLdeleteById = "DELETE FROM region WHERE id = %d";
     private final String SQLread = "SELECT * FROM region";
-    private final String SQLadd = "INSERT INTO region (name) VALUES ('%s')";
+    private final String SQLadd = "INSERT INTO region (id, name) VALUES ('%d','%s')";
 
     private Connection connection = ConnectUtil.getInstance().getConnection();
 
@@ -42,7 +42,7 @@ public class JDBCRegionRepositoryImpl implements RegionRepository {
     @Override
     public Region save(Region region) {
         try (Statement statement = connection.createStatement()){
-            statement.executeUpdate(String.format(SQLadd, region.getName()));
+            statement.executeUpdate(String.format(SQLadd, generateId(), region.getName()));
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -82,4 +82,14 @@ public class JDBCRegionRepositoryImpl implements RegionRepository {
     }
         return regionList;
     }
+
+    public Long generateId(){
+        List<Region> regionList = getAll();
+            if(regionList != null){
+                return getAll().stream()
+                        .skip(getAll().size()-1)
+                        .findFirst().get().getId()+1;
+            }else
+                return 1L;
+        }
 }
