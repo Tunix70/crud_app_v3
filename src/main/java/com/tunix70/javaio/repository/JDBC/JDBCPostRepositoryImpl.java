@@ -95,7 +95,7 @@ public class JDBCPostRepositoryImpl implements PostRepository {
         return new Timestamp(time);
     }
     public Long generateId(){
-        if(getAll() != null){
+        if(!getAll().isEmpty()){
             return getAll().stream()
                     .skip(getAll().size()-1)
                     .findFirst().get().getId()+1;

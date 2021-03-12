@@ -20,15 +20,17 @@ public class Runner {
         JDBCPostRepositoryImpl po = new JDBCPostRepositoryImpl();
         JDBCRegionRepositoryImpl reg = new JDBCRegionRepositoryImpl();
         JDBCWriterRepositoryImpl jw = new JDBCWriterRepositoryImpl();
-//
-//        List<Post> listPost = new ArrayList<>();
-//        listPost.add(po.getById(1l));
-//
-//
-//
-//        jw.save(new Writer(null, "Ivan", "Petrov", listPost, reg.getById(2L)));
-//        System.out.println(po.generateId());
+
+        List<Post> listPost = new ArrayList<>();
+        listPost.add(po.getById(1l));
+
+
+
+        jw.save(new Writer(null, "Ivan", "Petrov", listPost, reg.getById(2L)));
+        System.out.println(po.generateId());
         System.out.println(reg.generateId());
-//        System.out.println(jw.generateId());
+        System.out.println(jw.generateId());
+
+//        System.out.println(reg.getAll());
     }
 }

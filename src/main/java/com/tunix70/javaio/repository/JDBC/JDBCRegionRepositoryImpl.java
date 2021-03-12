@@ -84,8 +84,7 @@ public class JDBCRegionRepositoryImpl implements RegionRepository {
     }
 
     public Long generateId(){
-        List<Region> regionList = getAll();
-            if(regionList != null){
+            if(!getAll().isEmpty()){
                 return getAll().stream()
                         .skip(getAll().size()-1)
                         .findFirst().get().getId()+1;
