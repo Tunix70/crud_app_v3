@@ -23,13 +23,14 @@ public class Runner {
 
         List<Post> listPost = new ArrayList<>();
         listPost.add(po.getById(1l));
+        listPost.add(po.getById(5l));
 
 
 
-        jw.save(new Writer(null, "Ivan", "Petrov", listPost, reg.getById(2L)));
-        System.out.println(po.generateId());
-        System.out.println(reg.generateId());
-        System.out.println(jw.generateId());
+        jw.save(new Writer(null, "Ivan", "Petrov", listPost, reg.getById(1L)));
+//        System.out.println(po.generateId());
+//        System.out.println(reg.generateId());
+//        System.out.println(jw.generateId());
 
 //        System.out.println(reg.getAll());
     }

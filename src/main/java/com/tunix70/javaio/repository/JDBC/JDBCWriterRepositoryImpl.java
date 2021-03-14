@@ -1,5 +1,7 @@
 package com.tunix70.javaio.repository.JDBC;
 
+import com.tunix70.javaio.model.Post;
+import com.tunix70.javaio.model.Region;
 import com.tunix70.javaio.model.Writer;
 import com.tunix70.javaio.repository.WriterRepository;
 import com.tunix70.javaio.util.ConnectUtil;
@@ -9,15 +11,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class JDBCWriterRepositoryImpl implements WriterRepository {
-    private final String SQLUpdateWriter = "UPDATE writer SET firstName = '%s',lastName = '%s'  WHERE id = %d";
+    private final String SQLUpdateWriter = "UPDATE writer SET first_name = '%s',last_name = '%s'  WHERE id = %d";
     private final String SQLdeleteById = "DELETE FROM writer WHERE id = %d";
     private final String SQLread = "SELECT * FROM writer";
 
-    private final String SQLaddWriter = "INSERT INTO writer (id, firstName, lastName) VALUES ('%d', '%s', '%s')";
-    private final String SQLaddRegionWriter = "INSERT INTO region (writer_id) VALUES ('%d')";
-    private final String SQLaddPostWriter = "INSERT INTO post (writer_id) VALUES ('%d')";
+    private final String SQLaddWriter = "INSERT INTO writer (id, first_name, last_name) VALUES ('%d', '%s', '%s')";
+    private final String SQLaddRegionWriter = "UPDATE region SET writer_id = '%d' WHERE id = %d";
+    private final String SQLaddPostWriter = "UPDATE post SET writer_id = '%d' WHERE id = %d";
 
     private Connection connection = ConnectUtil.getInstance().getConnection();
+    private List<Region> regionList;
 
     @Override
     public List<Writer> getAll() {
@@ -41,12 +44,14 @@ public class JDBCWriterRepositoryImpl implements WriterRepository {
 
     @Override
     public Writer save(Writer writer) {
+        
         Long newId = generateId();
         try (Statement statement = connection.createStatement()) {
             statement.executeUpdate(String.format
                     (SQLaddWriter, newId, writer.getFirstName(),  writer.getLastName()));
-            statement.executeUpdate(String.format(SQLaddRegionWriter, newId));
-            statement.executeUpdate(String.format(SQLaddPostWriter, newId));
+            statement.executeUpdate(String.format(SQLaddRegionWriter, newId, writer.getRegion().getId()));
+            for(Long writerPostId : getIdPosts(writer)){
+            statement.executeUpdate(String.format(SQLaddPostWriter, newId, writerPostId));}
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -79,8 +84,8 @@ public class JDBCWriterRepositoryImpl implements WriterRepository {
             while (resultSet.next()) {
                 Writer writer = new Writer();
                 writer.setId((long) resultSet.getInt("id"));
-                writer.setFirstName(resultSet.getString("firstName"));
-                writer.setLastName(resultSet.getString("lastName"));
+                writer.setFirstName(resultSet.getString("first_name"));
+                writer.setLastName(resultSet.getString("last_name"));
 //                writer.setPost();
 //                writer.setRegion();
                 writerList.add(writer);
@@ -99,4 +104,13 @@ public class JDBCWriterRepositoryImpl implements WriterRepository {
         }else
             return 1l;
     }
+
+    public List<Long> getIdPosts(Writer writer){
+        List<Long> writerPostId = new ArrayList<>();
+        for(Post writerPost : writer.getPost()){
+            writerPostId.add(writerPost.getId());
+        }
+        return writerPostId;
+    }
+
 }
