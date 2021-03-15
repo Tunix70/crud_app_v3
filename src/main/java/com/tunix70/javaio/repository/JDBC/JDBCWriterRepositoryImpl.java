@@ -18,6 +18,8 @@ public class JDBCWriterRepositoryImpl implements WriterRepository {
     private final String SQLaddWriter = "INSERT INTO writer (id, first_name, last_name) VALUES ('%d', '%s', '%s')";
     private final String SQLaddRegionWriter = "UPDATE region SET writer_id = '%d' WHERE id = %d";
     private final String SQLaddPostWriter = "UPDATE post SET writer_id = '%d' WHERE id = %d";
+    private final String SQLDeleteOldPostWriter = "UPDATE post SET writer_id = NULL WHERE writer_id = %d";
+    private final String SQLDeleteOldRegionWriter = "UPDATE region SET writer_id = NULL WHERE writer_id = %d";
 
     private Connection connection = ConnectUtil.getInstance().getConnection();
 
@@ -60,10 +62,11 @@ public class JDBCWriterRepositoryImpl implements WriterRepository {
     @Override
     public Writer update(Writer writer) {
         try (Statement statement = connection.createStatement()) {
+            deleteDuplicatePostRegion(writer);
             statement.executeUpdate(String.format(
                     SQLUpdateWriter, writer.getFirstName(),  writer.getLastName(), writer.getId()));
             statement.executeUpdate(
-                    String.format(SQLaddRegionWriter, writer.getId(), getWriterRegionId(writer)));
+                    String.format(SQLaddRegionWriter, writer.getId(), writer.getRegion().getId()));
             for(Long writerPostId : getIdPosts(writer)){
                 statement.executeUpdate(String.format(SQLaddPostWriter, writer.getId(), writerPostId));}
         } catch (SQLException e) {
@@ -89,8 +92,8 @@ public class JDBCWriterRepositoryImpl implements WriterRepository {
                 writer.setId((long) resultSet.getInt("id"));
                 writer.setFirstName(resultSet.getString("first_name"));
                 writer.setLastName(resultSet.getString("last_name"));
-//                writer.setPost();
-//                writer.setRegion();
+                writer.setPost(getListWritersPost(writer));
+                writer.setRegion(getWritersRegion(writer));
                 writerList.add(writer);
             }
         } catch (SQLException throwables) {
@@ -116,9 +119,24 @@ public class JDBCWriterRepositoryImpl implements WriterRepository {
         return writerPostId;
     }
 
-    public Long getWriterRegionId(Writer writer){
+    public void deleteDuplicatePostRegion(Writer writer) {
+        try (Statement statement = connection.createStatement()) {
+            statement.executeUpdate(String.format(SQLDeleteOldRegionWriter, writer.getRegion().getId()));
+            for (Long writerPostId : getIdPosts(writer)) {
+                statement.executeUpdate(String.format(SQLDeleteOldPostWriter, writerPostId));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public List<Post> getListWritersPost(Writer writer){
+        JDBCPostRepositoryImpl postRepo = new JDBCPostRepositoryImpl();
+        List<Post> postList = postRepo.getAll();
 
     }
 
-    public void readSQLTableForDuplicate()
+
+    private Region getWritersRegion(Writer writer) {
+    }
 }
