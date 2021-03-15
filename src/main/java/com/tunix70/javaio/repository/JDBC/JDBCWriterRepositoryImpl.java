@@ -20,7 +20,6 @@ public class JDBCWriterRepositoryImpl implements WriterRepository {
     private final String SQLaddPostWriter = "UPDATE post SET writer_id = '%d' WHERE id = %d";
 
     private Connection connection = ConnectUtil.getInstance().getConnection();
-    private List<Region> regionList;
 
     @Override
     public List<Writer> getAll() {
@@ -60,12 +59,16 @@ public class JDBCWriterRepositoryImpl implements WriterRepository {
 
     @Override
     public Writer update(Writer writer) {
-//        try (Statement statement = connection.createStatement()) {
-//            statement.execute(String.format(SQLUpdate, writer.getContent(), getTimeStamp(writer.getUpdated()),
-//                    getIntegerwriterStatus(writer.getwriterStatus()), writer.getId()));
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
+        try (Statement statement = connection.createStatement()) {
+            statement.executeUpdate(String.format(
+                    SQLUpdateWriter, writer.getFirstName(),  writer.getLastName(), writer.getId()));
+            statement.executeUpdate(
+                    String.format(SQLaddRegionWriter, writer.getId(), getWriterRegionId(writer)));
+            for(Long writerPostId : getIdPosts(writer)){
+                statement.executeUpdate(String.format(SQLaddPostWriter, writer.getId(), writerPostId));}
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return writer;
     }
 
@@ -113,4 +116,9 @@ public class JDBCWriterRepositoryImpl implements WriterRepository {
         return writerPostId;
     }
 
+    public Long getWriterRegionId(Writer writer){
+
+    }
+
+    public void readSQLTableForDuplicate()
 }

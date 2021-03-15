@@ -27,7 +27,7 @@ public class Runner {
 
 
 
-        jw.save(new Writer(null, "Ivan", "Petrov", listPost, reg.getById(1L)));
+        jw.update(new Writer(5l, "Ksenya", "Razina", listPost, reg.getById(3L)));
 //        System.out.println(po.generateId());
 //        System.out.println(reg.generateId());
 //        System.out.println(jw.generateId());
