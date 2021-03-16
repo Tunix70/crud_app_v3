@@ -31,8 +31,11 @@ public class Runner {
 
 
 //        jw.save(new Writer(null, "Ivan", "Burov", listPost, reg.getAll().get(0)));
-//        jw.update(new Writer(1l, "Lusya", "Ivanova", listPost, reg.getAll().get(2)));
-        System.out.println(jw.getById(1l));
+//        jw.update(new Writer(1l, "Lusya", "Ivanova", listPost, reg.getAll().get(1)));
+//        System.out.println(jw.getWritersPostList(1l));
+//        System.out.println(jw.getWritersRegion(1l));
+//          System.out.println(jw.getAll());
+        jw.deleteDuplicatePostRegion(1l);
 
 
 

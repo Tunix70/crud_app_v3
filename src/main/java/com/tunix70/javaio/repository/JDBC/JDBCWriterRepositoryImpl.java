@@ -22,8 +22,8 @@ public class JDBCWriterRepositoryImpl implements WriterRepository {
     private final String SQLDeleteOldPostWriter = "UPDATE post SET writer_id = NULL WHERE writer_id = %d";
     private final String SQLDeleteOldRegionWriter = "UPDATE region SET writer_id = NULL WHERE writer_id = %d";
 //для вытаскивания Post и Region из других таблиц
-    private final String SQLgetPost = "SELECT id FROM post WHERE writer_id = '%d'";
-    private final String SQLgetRegion = "SELECT id FROM region WHERE writer_id = '%d'";
+    private final String SQLgetPost = "SELECT id, content, created, updated, post_status FROM post WHERE writer_id = '%d'";
+    private final String SQLgetRegion = "SELECT id, name FROM region WHERE writer_id = '%d'";
 
     private Connection connection = ConnectUtil.getInstance().getConnection();
 
@@ -66,7 +66,7 @@ public class JDBCWriterRepositoryImpl implements WriterRepository {
     @Override
     public Writer update(Writer writer) {
         try (Statement statement = connection.createStatement()) {
-            deleteDuplicatePostRegion(writer);
+            deleteDuplicatePostRegion(writer.getId());
             statement.executeUpdate(String.format(
                     SQLUpdateWriter, writer.getFirstName(),  writer.getLastName(), writer.getId()));
             statement.executeUpdate(
@@ -96,8 +96,8 @@ public class JDBCWriterRepositoryImpl implements WriterRepository {
                 writer.setId((long) resultSet.getInt("id"));
                 writer.setFirstName(resultSet.getString("first_name"));
                 writer.setLastName(resultSet.getString("last_name"));
-//                writer.setPost(getListWritersPost(writer));
-//                writer.setRegion(getWritersRegion(writer));
+                writer.setPost(getWritersPostList(writer.getId()));
+                writer.setRegion(getWritersRegion(writer.getId()));
                 writerList.add(writer);
             }
         } catch (SQLException throwables) {
@@ -123,22 +123,20 @@ public class JDBCWriterRepositoryImpl implements WriterRepository {
         return writerPostId;
     }
 
-    public void deleteDuplicatePostRegion(Writer writer) {
+    public void deleteDuplicatePostRegion(Long writerId) {
         try (Statement statement = connection.createStatement()) {
-            statement.executeUpdate(String.format(SQLDeleteOldRegionWriter, writer.getRegion().getId()));
-            for (Long writerPostId : getIdPosts(writer)) {
-                statement.executeUpdate(String.format(SQLDeleteOldPostWriter, writerPostId));
-            }
+            statement.executeUpdate(String.format(SQLDeleteOldRegionWriter, writerId));
+            statement.executeUpdate(String.format(SQLDeleteOldPostWriter, writerId));
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    public List<Post> getListWritersPost(Writer writer){
+    public List<Post> getWritersPostList(Long writerId){
         JDBCPostRepositoryImpl postRepo = new JDBCPostRepositoryImpl();
         List<Post> listPost = new ArrayList<>();
         try (Statement statement = connection.createStatement()) {
-            ResultSet resultSet = statement.executeQuery(String.format(SQLgetPost, writer.getId()));
+            ResultSet resultSet = statement.executeQuery(String.format(SQLgetPost, writerId));
             listPost = postRepo.getPostFromSQL(resultSet);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -148,11 +146,11 @@ public class JDBCWriterRepositoryImpl implements WriterRepository {
     }
 
 
-    private Region getWritersRegion(Writer writer) {
+    public Region getWritersRegion(Long writerId) {
         JDBCRegionRepositoryImpl regionRepo = new JDBCRegionRepositoryImpl();
         Region region = new Region();
         try (Statement statement = connection.createStatement()) {
-            ResultSet resultSet = statement.executeQuery(String.format(SQLgetRegion, writer.getId()));
+            ResultSet resultSet = statement.executeQuery(String.format(SQLgetRegion, writerId));
             List<Region> regionList = regionRepo.getRegionFromSQL(resultSet);
             region = regionList.get(0);
         } catch (SQLException throwables) {
