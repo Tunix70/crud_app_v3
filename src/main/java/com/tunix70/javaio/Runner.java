@@ -21,17 +21,24 @@ public class Runner {
         JDBCRegionRepositoryImpl reg = new JDBCRegionRepositoryImpl();
         JDBCWriterRepositoryImpl jw = new JDBCWriterRepositoryImpl();
 
-        List<Post> listPost = new ArrayList<>();
-        listPost.add(po.getById(1l));
-        listPost.add(po.getById(5l));
+//        po.save(new Post(null, "text4", null, null, PostStatus.ACTIVE));
+//        po.save(new Post(null, "text2", null, null, PostStatus.DELETED));
+//        reg.save(new Region(null, "eu"));
+//        reg.save(new Region(null, "ua"));
+
+                List<Post> listPost = new ArrayList<>();
+        listPost.add(po.getById(2l));
+
+
+//        jw.save(new Writer(null, "Ivan", "Burov", listPost, reg.getAll().get(0)));
+//        jw.update(new Writer(1l, "Lusya", "Ivanova", listPost, reg.getAll().get(2)));
+        System.out.println(jw.getById(1l));
 
 
 
-        jw.update(new Writer(5l, "Ksenya", "Razina", listPost, reg.getById(3L)));
-//        System.out.println(po.generateId());
-//        System.out.println(reg.generateId());
-//        System.out.println(jw.generateId());
 
-//        System.out.println(reg.getAll());
+
+//        jw.update(new Writer(5l, "Ksenya", "Razina", listPost, reg.getById(3L)));
+
     }
 }

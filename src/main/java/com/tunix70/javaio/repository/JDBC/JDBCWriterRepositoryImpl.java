@@ -18,8 +18,12 @@ public class JDBCWriterRepositoryImpl implements WriterRepository {
     private final String SQLaddWriter = "INSERT INTO writer (id, first_name, last_name) VALUES ('%d', '%s', '%s')";
     private final String SQLaddRegionWriter = "UPDATE region SET writer_id = '%d' WHERE id = %d";
     private final String SQLaddPostWriter = "UPDATE post SET writer_id = '%d' WHERE id = %d";
+//для удаления старых значений при внесении новых при обновлении Writer
     private final String SQLDeleteOldPostWriter = "UPDATE post SET writer_id = NULL WHERE writer_id = %d";
     private final String SQLDeleteOldRegionWriter = "UPDATE region SET writer_id = NULL WHERE writer_id = %d";
+//для вытаскивания Post и Region из других таблиц
+    private final String SQLgetPost = "SELECT id FROM post WHERE writer_id = '%d'";
+    private final String SQLgetRegion = "SELECT id FROM region WHERE writer_id = '%d'";
 
     private Connection connection = ConnectUtil.getInstance().getConnection();
 
@@ -92,8 +96,8 @@ public class JDBCWriterRepositoryImpl implements WriterRepository {
                 writer.setId((long) resultSet.getInt("id"));
                 writer.setFirstName(resultSet.getString("first_name"));
                 writer.setLastName(resultSet.getString("last_name"));
-                writer.setPost(getListWritersPost(writer));
-                writer.setRegion(getWritersRegion(writer));
+//                writer.setPost(getListWritersPost(writer));
+//                writer.setRegion(getWritersRegion(writer));
                 writerList.add(writer);
             }
         } catch (SQLException throwables) {
@@ -132,11 +136,28 @@ public class JDBCWriterRepositoryImpl implements WriterRepository {
 
     public List<Post> getListWritersPost(Writer writer){
         JDBCPostRepositoryImpl postRepo = new JDBCPostRepositoryImpl();
-        List<Post> postList = postRepo.getAll();
+        List<Post> listPost = new ArrayList<>();
+        try (Statement statement = connection.createStatement()) {
+            ResultSet resultSet = statement.executeQuery(String.format(SQLgetPost, writer.getId()));
+            listPost = postRepo.getPostFromSQL(resultSet);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return listPost;
 
     }
 
 
     private Region getWritersRegion(Writer writer) {
+        JDBCRegionRepositoryImpl regionRepo = new JDBCRegionRepositoryImpl();
+        Region region = new Region();
+        try (Statement statement = connection.createStatement()) {
+            ResultSet resultSet = statement.executeQuery(String.format(SQLgetRegion, writer.getId()));
+            List<Region> regionList = regionRepo.getRegionFromSQL(resultSet);
+            region = regionList.get(0);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return region;
     }
 }
