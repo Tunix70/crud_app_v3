@@ -17,12 +17,10 @@ public class JDBCRegionRepositoryImpl implements RegionRepository {
     private final String SQLread = "SELECT * FROM region";
     private final String SQLadd = "INSERT INTO region (id, name) VALUES ('%d','%s')";
 
-    private Connection connection = ConnectUtil.getInstance().getConnection();
-
     @Override
     public List<Region> getAll() {
         List<Region> listRegion= new ArrayList<>();
-        try (Statement statement = connection.createStatement()){
+        try (Statement statement = ConnectUtil.getStatement()){
             ResultSet resultSet = statement.executeQuery(SQLread);
             listRegion = getRegionFromSQL(resultSet);
         } catch (SQLException throwables) {
@@ -41,7 +39,7 @@ public class JDBCRegionRepositoryImpl implements RegionRepository {
 
     @Override
     public Region save(Region region) {
-        try (Statement statement = connection.createStatement()){
+        try (Statement statement = ConnectUtil.getStatement()){
             statement.executeUpdate(String.format(SQLadd, generateId(), region.getName()));
         } catch (SQLException e) {
             e.printStackTrace();
@@ -51,7 +49,7 @@ public class JDBCRegionRepositoryImpl implements RegionRepository {
 
     @Override
     public Region update(Region region) {
-        try (Statement statement = connection.createStatement()){
+        try (Statement statement = ConnectUtil.getStatement()){
             statement.execute(String.format(SQLUpdate, region.getName(), region.getId()));
         } catch (SQLException e) {
             e.printStackTrace();
@@ -61,7 +59,7 @@ public class JDBCRegionRepositoryImpl implements RegionRepository {
 
     @Override
     public void deleteById(Long id) {
-        try (Statement statement = connection.createStatement()){
+        try (Statement statement = ConnectUtil.getStatement()){
             statement.execute(String.format(SQLdeleteById, id));
         } catch (SQLException e) {
             e.printStackTrace();

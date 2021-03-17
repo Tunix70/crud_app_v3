@@ -3,6 +3,7 @@ package com.tunix70.javaio.util;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 public class ConnectUtil {
     public static ConnectUtil connectUtil = null;
@@ -33,5 +34,15 @@ public class ConnectUtil {
 
     public Connection getConnection() {
         return connection;
+    }
+
+    public static Statement getStatement(){
+        Statement statement = null;
+        try {
+            statement = getInstance().getConnection().createStatement();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return statement;
     }
 }

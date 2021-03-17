@@ -25,12 +25,10 @@ public class JDBCWriterRepositoryImpl implements WriterRepository {
     private final String SQLgetPost = "SELECT id, content, created, updated, post_status FROM post WHERE writer_id = '%d'";
     private final String SQLgetRegion = "SELECT id, name FROM region WHERE writer_id = '%d'";
 
-    private Connection connection = ConnectUtil.getInstance().getConnection();
-
     @Override
     public List<Writer> getAll() {
         List<Writer> listwriter = new ArrayList<>();
-        try (Statement statement = connection.createStatement()) {
+        try (Statement statement = ConnectUtil.getStatement()) {
             ResultSet resultSet = statement.executeQuery(SQLread);
             listwriter = getWriterFromSQL(resultSet);
         } catch (SQLException throwables) {
@@ -51,7 +49,7 @@ public class JDBCWriterRepositoryImpl implements WriterRepository {
     public Writer save(Writer writer) {
         
         Long newId = generateId();
-        try (Statement statement = connection.createStatement()) {
+        try (Statement statement = ConnectUtil.getStatement()) {
             String SQL1 = (String.format
                     (SQLaddWriter, newId, writer.getFirstName(),  writer.getLastName()));
             statement.addBatch(SQL1);
@@ -70,7 +68,7 @@ public class JDBCWriterRepositoryImpl implements WriterRepository {
 
     @Override
     public Writer update(Writer writer) {
-        try (Statement statement = connection.createStatement()) {
+        try (Statement statement = ConnectUtil.getStatement()) {
             deleteDuplicatePostRegion(writer.getId());
             String SQL1 = (String.format(
                     SQLUpdateWriter, writer.getFirstName(),  writer.getLastName(), writer.getId()));
@@ -91,7 +89,7 @@ public class JDBCWriterRepositoryImpl implements WriterRepository {
 
     @Override
     public void deleteById(Long id) {
-        try (Statement statement = connection.createStatement()) {
+        try (Statement statement = ConnectUtil.getStatement()) {
             statement.execute(String.format(SQLdeleteById, id));
         } catch (SQLException e) {
             e.printStackTrace();
@@ -134,7 +132,7 @@ public class JDBCWriterRepositoryImpl implements WriterRepository {
     }
 
     public void deleteDuplicatePostRegion(Long writerId) {
-        try (Statement statement = connection.createStatement()) {
+        try (Statement statement = ConnectUtil.getStatement()) {
             String SQL = (String.format(SQLDeleteOldRegionWriter, writerId));
             statement.addBatch(SQL);
             String SQL1 = (String.format(SQLDeleteOldPostWriter, writerId));
@@ -148,7 +146,7 @@ public class JDBCWriterRepositoryImpl implements WriterRepository {
     public List<Post> getWritersPostList(Long writerId){
         JDBCPostRepositoryImpl postRepo = new JDBCPostRepositoryImpl();
         List<Post> listPost = new ArrayList<>();
-        try (Statement statement = connection.createStatement()) {
+        try (Statement statement = ConnectUtil.getStatement()) {
             ResultSet resultSet = statement.executeQuery(String.format(SQLgetPost, writerId));
             listPost = postRepo.getPostFromSQL(resultSet);
         } catch (SQLException throwables) {
@@ -162,7 +160,7 @@ public class JDBCWriterRepositoryImpl implements WriterRepository {
     public Region getWritersRegion(Long writerId) {
         JDBCRegionRepositoryImpl regionRepo = new JDBCRegionRepositoryImpl();
         Region region = new Region();
-        try (Statement statement = connection.createStatement()) {
+        try (Statement statement = ConnectUtil.getStatement()) {
             ResultSet resultSet = statement.executeQuery(String.format(SQLgetRegion, writerId));
             List<Region> regionList = regionRepo.getRegionFromSQL(resultSet);
             if(!regionList.isEmpty()) {

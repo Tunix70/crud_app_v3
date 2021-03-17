@@ -7,6 +7,7 @@ import com.tunix70.javaio.model.Writer;
 import com.tunix70.javaio.repository.JDBC.JDBCPostRepositoryImpl;
 import com.tunix70.javaio.repository.JDBC.JDBCRegionRepositoryImpl;
 import com.tunix70.javaio.repository.JDBC.JDBCWriterRepositoryImpl;
+import com.tunix70.javaio.util.ConnectUtil;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -37,8 +38,8 @@ public class Runner {
 //        System.out.println(jw.getWritersPostList(1l));
 //        System.out.println(jw.getWritersRegion(1l));
 //          System.out.println(jw.getAll());
-        jw.deleteDuplicatePostRegion(1l);
-
+//        jw.deleteDuplicatePostRegion(1l);
+        ConnectUtil.
 
 
 

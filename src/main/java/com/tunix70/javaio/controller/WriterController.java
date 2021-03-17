@@ -3,26 +3,28 @@ package com.tunix70.javaio.controller;
 import com.tunix70.javaio.model.Writer;
 import com.tunix70.javaio.repository.JDBC.JDBCWriterRepositoryImpl;
 import com.tunix70.javaio.repository.WriterRepository;
+import com.tunix70.javaio.service.RegionService;
+import com.tunix70.javaio.service.WriterService;
 
 
 import java.util.List;
 
 public class WriterController {
-    private WriterRepository writerRepository = new JDBCWriterRepositoryImpl();
+    private WriterService writerService = new WriterService();
 
     public List<Writer> getAll(){
-        return writerRepository.getAll();
+        return writerService.getAll();
     }
     public Writer getById(Long id){
-        return writerRepository.getById(id);
+        return writerService.getById(id);
     }
     public Writer save(Writer writer){
-        return writerRepository.save(writer);
+        return writerService.save(writer);
     }
     public Writer update(Writer writer){
-        return writerRepository.update(writer);
+        return writerService.update(writer);
     }
     public void deleteById(Long id){
-        writerRepository.deleteById(id);
+        writerService.deleteById(id);
     }
 }

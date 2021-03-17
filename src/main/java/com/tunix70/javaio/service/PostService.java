@@ -1,29 +1,27 @@
-package com.tunix70.javaio.controller;
+package com.tunix70.javaio.service;
 
 import com.tunix70.javaio.model.Post;
 import com.tunix70.javaio.repository.JDBC.JDBCPostRepositoryImpl;
 import com.tunix70.javaio.repository.PostRepository;
-import com.tunix70.javaio.service.PostService;
 
 import java.util.List;
 
-public class PostController {
-    private PostService postService = new PostService();
+public class PostService {
+    private PostRepository postRepository = new JDBCPostRepositoryImpl();
 
     public List<Post> getAll(){
-        return postService.getAll();
+        return postRepository.getAll();
     }
     public Post getById(Long id){
-        return postService.getById(id);
+        return postRepository.getById(id);
     }
     public Post save(Post post){
-        return postService.save(post);
+        return postRepository.save(post);
     }
     public Post update(Post post){
-        return postService.update(post);
+        return postRepository.update(post);
     }
     public void deleteById(Long id){
-        postService.deleteById(id);
+        postRepository.deleteById(id);
     }
-
 }
