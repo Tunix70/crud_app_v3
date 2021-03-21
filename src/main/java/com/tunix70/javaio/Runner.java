@@ -22,24 +22,23 @@ public class Runner {
         JDBCRegionRepositoryImpl reg = new JDBCRegionRepositoryImpl();
         JDBCWriterRepositoryImpl jw = new JDBCWriterRepositoryImpl();
 
-//        po.save(new Post(null, "text4", null, null, PostStatus.ACTIVE));
-//        po.save(new Post(null, "text2", null, null, PostStatus.DELETED));
-//        po.save(new Post(null, "text6", null, null, PostStatus.DELETED));
-//        reg.save(new Region(null, "eu"));
-//        reg.save(new Region(null, "ua"));
+        po.save(new Post(null, "text4", null, null, PostStatus.ACTIVE));
+        po.save(new Post(null, "text2", null, null, PostStatus.DELETED));
+        po.save(new Post(null, "text6", null, null, PostStatus.DELETED));
+        reg.save(new Region(null, "ww"));
+        reg.save(new Region(null, "qq"));
 
                 List<Post> listPost = new ArrayList<>();
         listPost.add(po.getById(3l));
 
-            jw.deleteDuplicatePostRegion(2l);
-//        jw.save(new Writer(null, "Ivan", "Burov", listPost, reg.getAll().get(0)));
+        //        jw.save(new Writer(null, "Ivan", "Burov", listPost, reg.getAll().get(0)));
 //        jw.save(new Writer(null, "Vasya", "Ivanov", listPost, reg.getAll().get(1)));
         jw.save(new Writer(null, "Kotya", "Opps", listPost, reg.getAll().get(1)));
 //        System.out.println(jw.getWritersPostList(1l));
 //        System.out.println(jw.getWritersRegion(1l));
 //          System.out.println(jw.getAll());
 //        jw.deleteDuplicatePostRegion(1l);
-        ConnectUtil.
+
 
 
 

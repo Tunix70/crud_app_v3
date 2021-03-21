@@ -1,9 +1,6 @@
 package com.tunix70.javaio.util;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 public class ConnectUtil {
     public static ConnectUtil connectUtil = null;
@@ -36,13 +33,13 @@ public class ConnectUtil {
         return connection;
     }
 
-    public static Statement getStatement(){
-        Statement statement = null;
+    public static PreparedStatement getPreparedStatement(String SQL){
+        PreparedStatement preparedStatement = null;
         try {
-            statement = getInstance().getConnection().createStatement();
+            preparedStatement = getInstance().getConnection().prepareStatement(SQL);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
-        return statement;
+        return preparedStatement;
     }
 }

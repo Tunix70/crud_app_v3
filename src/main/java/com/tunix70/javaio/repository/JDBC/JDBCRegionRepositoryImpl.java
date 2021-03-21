@@ -4,25 +4,22 @@ import com.tunix70.javaio.model.Region;
 import com.tunix70.javaio.repository.RegionRepository;
 import com.tunix70.javaio.util.ConnectUtil;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class JDBCRegionRepositoryImpl implements RegionRepository {
-    private final String SQLUpdate = "UPDATE region SET name = '%s' WHERE id = %d";
-    private final String SQLdeleteById = "DELETE FROM region WHERE id = %d";
+    private final String SQLUpdate = "UPDATE region SET name = ? WHERE id = ?";
+    private final String SQLdeleteById = "DELETE FROM region WHERE id = ?";
     private final String SQLread = "SELECT * FROM region";
-    private final String SQLadd = "INSERT INTO region (id, name) VALUES ('%d','%s')";
+    private final String SQLadd = "INSERT INTO region (id, name) VALUES (?,?)";
 
     @Override
     public List<Region> getAll() {
         List<Region> listRegion= new ArrayList<>();
-        try (Statement statement = ConnectUtil.getStatement()){
-            ResultSet resultSet = statement.executeQuery(SQLread);
-            listRegion = getRegionFromSQL(resultSet);
+        try (PreparedStatement preparedStatement = ConnectUtil.getPreparedStatement(SQLread)){
+            ResultSet resultSet = preparedStatement.executeQuery();
+            listRegion = getRegion(resultSet);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
@@ -39,8 +36,10 @@ public class JDBCRegionRepositoryImpl implements RegionRepository {
 
     @Override
     public Region save(Region region) {
-        try (Statement statement = ConnectUtil.getStatement()){
-            statement.executeUpdate(String.format(SQLadd, generateId(), region.getName()));
+        try (PreparedStatement preparedStatement = ConnectUtil.getPreparedStatement(SQLadd)){
+            preparedStatement.setLong(1, generateId());
+            preparedStatement.setString(2, region.getName());
+            preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -49,8 +48,10 @@ public class JDBCRegionRepositoryImpl implements RegionRepository {
 
     @Override
     public Region update(Region region) {
-        try (Statement statement = ConnectUtil.getStatement()){
-            statement.execute(String.format(SQLUpdate, region.getName(), region.getId()));
+        try (PreparedStatement preparedStatement = ConnectUtil.getPreparedStatement(SQLUpdate)){
+            preparedStatement.setString(1, region.getName());
+            preparedStatement.setLong(2, region.getId());
+            preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -59,14 +60,15 @@ public class JDBCRegionRepositoryImpl implements RegionRepository {
 
     @Override
     public void deleteById(Long id) {
-        try (Statement statement = ConnectUtil.getStatement()){
-            statement.execute(String.format(SQLdeleteById, id));
+        try (PreparedStatement preparedStatement = ConnectUtil.getPreparedStatement(SQLdeleteById)){
+            preparedStatement.setLong(1, id);
+            preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    public List<Region> getRegionFromSQL(ResultSet resultSet) {
+    public List<Region> getRegion(ResultSet resultSet) {
         List<Region> regionList = new ArrayList<>();
         try {
             while (resultSet.next()) {

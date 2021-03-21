@@ -13,18 +13,18 @@ import java.util.Date;
 import java.util.List;
 
 public class JDBCPostRepositoryImpl implements PostRepository {
-    private final String SQLUpdate = "UPDATE post SET content = '%s',updated = '%s', post_status = '%s'  WHERE id = %d";
-    private final String SQLdeleteById = "DELETE FROM post WHERE id = %d";
+    private final String SQLUpdate = "UPDATE post SET content = ?,updated = ?, post_status = ?  WHERE id = ?";
+    private final String SQLdeleteById = "DELETE FROM post WHERE id = ?";
     private final String SQLread = "SELECT * FROM post";
     private final String SQLadd = "INSERT INTO post (id, content, created, updated, post_status)" +
-            " VALUES ('%d', '%s', '%s', '%s', '%s')";
+            " VALUES (?, ?, ?, ?, ?)";
     private Long date = new Date().getTime();
 
     @Override
     public List<Post> getAll() {
         List<Post> listpost = new ArrayList<>();
-        try (Statement statement = ConnectUtil.getStatement()) {
-            ResultSet resultSet = statement.executeQuery(SQLread);
+        try (PreparedStatement preparedStatement = ConnectUtil.getPreparedStatement(SQLread)) {
+            ResultSet resultSet = preparedStatement.executeQuery();
             listpost = getPostFromSQL(resultSet);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -42,9 +42,13 @@ public class JDBCPostRepositoryImpl implements PostRepository {
 
     @Override
     public Post save(Post post) {
-        try (Statement statement = ConnectUtil.getStatement()) {
-            statement.executeUpdate(String.format(SQLadd, generateId(), post.getContent(),  getTimeStamp(date),
-                    getTimeStamp(date), post.getPostStatus()));
+        try (PreparedStatement preparedStatement = ConnectUtil.getPreparedStatement(SQLadd)) {
+            preparedStatement.setLong(1, generateId());
+            preparedStatement.setString(2, post.getContent());
+            preparedStatement.setTimestamp(3, getTimeStamp(date));
+            preparedStatement.setTimestamp(4, getTimeStamp(date));
+            preparedStatement.setString(5, String.valueOf(post.getPostStatus()));
+            preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -53,9 +57,12 @@ public class JDBCPostRepositoryImpl implements PostRepository {
 
     @Override
     public Post update(Post post) {
-        try (Statement statement = ConnectUtil.getStatement()) {
-            statement.execute(String.format(SQLUpdate, post.getContent(), getTimeStamp(date),
-                    post.getPostStatus(), post.getId()));
+        try (PreparedStatement preparedStatement = ConnectUtil.getPreparedStatement(SQLUpdate)) {
+            preparedStatement.setString(1, post.getContent());
+            preparedStatement.setTimestamp(2, getTimeStamp(date));
+            preparedStatement.setString(3, String.valueOf(post.getPostStatus()));
+            preparedStatement.setLong(4, post.getId());
+            preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -64,8 +71,9 @@ public class JDBCPostRepositoryImpl implements PostRepository {
 
     @Override
     public void deleteById(Long id) {
-        try (Statement statement = ConnectUtil.getStatement()) {
-            statement.execute(String.format(SQLdeleteById, id));
+        try (PreparedStatement preparedStatement = ConnectUtil.getPreparedStatement(SQLdeleteById)) {
+            preparedStatement.setLong(1, id);
+            preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
