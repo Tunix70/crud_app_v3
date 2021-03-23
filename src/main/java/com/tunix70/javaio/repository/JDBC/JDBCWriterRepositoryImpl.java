@@ -115,7 +115,7 @@ public class JDBCWriterRepositoryImpl implements WriterRepository {
         }
     }
 
-    public List<Writer> getWriter(ResultSet resultSet) {
+    private List<Writer> getWriter(ResultSet resultSet) {
         List<Writer> writerList = new ArrayList<>();
         try {
             while (resultSet.next()) {
@@ -133,7 +133,7 @@ public class JDBCWriterRepositoryImpl implements WriterRepository {
         return writerList;
     }
 
-    public Long generateId(){
+    private Long generateId(){
         if(!getAll().isEmpty()){
             return getAll().stream()
                     .skip(getAll().size()-1)
@@ -142,7 +142,7 @@ public class JDBCWriterRepositoryImpl implements WriterRepository {
             return 1l;
     }
 
-    public List<Long> getIdPosts(Writer writer){
+    private List<Long> getIdPosts(Writer writer){
         List<Long> writerPostId = new ArrayList<>();
         for(Post writerPost : writer.getPost()){
             writerPostId.add(writerPost.getId());
@@ -150,7 +150,7 @@ public class JDBCWriterRepositoryImpl implements WriterRepository {
         return writerPostId;
     }
 
-    public void deleteDuplicatePostRegion(Long writerId) {
+    private void deleteDuplicatePostRegion(Long writerId) {
         try (PreparedStatement preparedStatement = ConnectUtil.getPreparedStatement(SQLDeleteOldWriter)) {
             preparedStatement.setString(1, "region");
             preparedStatement.setLong(2, writerId);
@@ -166,13 +166,13 @@ public class JDBCWriterRepositoryImpl implements WriterRepository {
         }
     }
 
-    public List<Post> getWritersPostList(Long writerId){
+    private List<Post> getWritersPostList(Long writerId){
         JDBCPostRepositoryImpl postRepo = new JDBCPostRepositoryImpl();
         List<Post> listPost = new ArrayList<>();
         try (PreparedStatement preparedStatement = ConnectUtil.getPreparedStatement(SQLgetPost)) {
             preparedStatement.setLong(1, writerId);
             ResultSet resultSet = preparedStatement.executeQuery();
-            listPost = postRepo.getPostFromSQL(resultSet);
+            listPost = postRepo.getPost(resultSet);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
@@ -181,7 +181,7 @@ public class JDBCWriterRepositoryImpl implements WriterRepository {
     }
 
 
-    public Region getWritersRegion(Long writerId) {
+    private Region getWritersRegion(Long writerId) {
         JDBCRegionRepositoryImpl regionRepo = new JDBCRegionRepositoryImpl();
         Region region = new Region();
         try (PreparedStatement preparedStatement = ConnectUtil.getPreparedStatement(SQLgetRegion)) {

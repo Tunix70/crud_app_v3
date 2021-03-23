@@ -83,7 +83,7 @@ public class JDBCRegionRepositoryImpl implements RegionRepository {
         return regionList;
     }
 
-    public Long generateId(){
+    private Long generateId(){
             if(!getAll().isEmpty()){
                 return getAll().stream()
                         .skip(getAll().size()-1)

@@ -1,9 +1,8 @@
 package com.tunix70.javaio.repository.JDBC;
 
-import com.tunix70.javaio.exceptions.InputCheckException;
+
 import com.tunix70.javaio.model.Post;
 import com.tunix70.javaio.model.PostStatus;
-import com.tunix70.javaio.model.Region;
 import com.tunix70.javaio.repository.PostRepository;
 import com.tunix70.javaio.util.ConnectUtil;
 
@@ -25,7 +24,7 @@ public class JDBCPostRepositoryImpl implements PostRepository {
         List<Post> listpost = new ArrayList<>();
         try (PreparedStatement preparedStatement = ConnectUtil.getPreparedStatement(SQLread)) {
             ResultSet resultSet = preparedStatement.executeQuery();
-            listpost = getPostFromSQL(resultSet);
+            listpost = getPost(resultSet);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
@@ -79,7 +78,7 @@ public class JDBCPostRepositoryImpl implements PostRepository {
         }
     }
 
-    public List<Post> getPostFromSQL(ResultSet resultSet) {
+    public List<Post> getPost(ResultSet resultSet) {
         List<Post> postList = new ArrayList<>();
         try {
             while (resultSet.next()) {
