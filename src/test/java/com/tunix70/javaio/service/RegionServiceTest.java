@@ -18,6 +18,16 @@ import static org.mockito.Mockito.*;
 
 
 class RegionServiceTest {
+//    private static RegionService regionServiceMock;
+//    private static Region region1;
+//    private static Region region2;
+
+    @BeforeClass
+//    regionServiceMock = mock(RegionService.class);
+//    Region region1 = new Region(1l, "ru");
+//    Region region2 = new Region(2l, "eu");
+//    List<Region> regionList = new ArrayList<>(Arrays.asList(region1, region2));
+//    when(regionServiceMock.getAll()).thenReturn(regionList);
 
     @Test
     void test_getAll_region() {
