@@ -52,7 +52,7 @@ class RegionServiceTest {
     }
 
     @Test
-    void getById() {
+    void test_getById() {
         regionServiceMock = mock(RegionService.class);
         region1 = new Region(1l, "ru");
         region2 = new Region(2l, "eu");
@@ -69,7 +69,7 @@ class RegionServiceTest {
     }
 
     @Test
-    void save() {
+    void test_save() {
         regionServiceMock = mock(RegionService.class);
         region1 = new Region(1l, "ru");
         region2 = new Region(2l, "eu");
@@ -83,7 +83,7 @@ class RegionServiceTest {
     }
 
     @Test
-    void update() {
+    void test_update() {
         regionServiceMock = mock(RegionService.class);
         region1 = new Region(1l, "ru");
         region2 = new Region(2l, "eu");
@@ -97,16 +97,11 @@ class RegionServiceTest {
     }
 
     @Test
-    void deleteById() {
-//        regionServiceMock = mock(RegionService.class);
-//        region1 = new Region(1l, "ru");
-//        region2 = new Region(2l, "eu");
-//        List<Region> regionList = new ArrayList<>(Arrays.asList(region1, region2));
-//        when(regionServiceMock.getAll()).thenReturn(regionList);
-//        doNothing().when(regionServiceMock.deleteById(1l)).
-//
-//        regionServiceMock.deleteById(1l);
-//        assertFalse(regionList.contains(region1));
+    void test_deleteById() {
+        regionServiceMock = mock(RegionService.class);
+        regionServiceMock.deleteById(any());
+        verify(regionServiceMock).deleteById(any());
+
 
     }
 }
