@@ -101,7 +101,5 @@ class RegionServiceTest {
         regionServiceMock = mock(RegionService.class);
         regionServiceMock.deleteById(any());
         verify(regionServiceMock).deleteById(any());
-
-
     }
 }
