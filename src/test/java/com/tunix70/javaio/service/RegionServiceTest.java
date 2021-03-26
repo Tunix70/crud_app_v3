@@ -16,7 +16,7 @@ import java.util.List;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
-
+// ТЕСТЫ ПРОПУСКАЕМ ДО МОДУЛЯ СО SPRINGom
 class RegionServiceTest {
 //    @Mock
     private static RegionService regionServiceMock;
