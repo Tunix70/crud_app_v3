@@ -1,51 +1,27 @@
 <h1>Задание</h1>
 
-Необходимо реализовать консольное CRUD приложение, которое имеет
-следующие сущности:
+Необходимо реализовать консольное CRUD приложение, которое
+взаимодействует с БД и позволяет выполнять все CRUD операции над
+сущностями:
 
-User (id, firstName, lastName, List<Post> posts, Region region)
+Writer (id, firstName, lastName, List<Post> posts, Region region)
   
-Post (id, content, created, updated)
+Post (id, content, created, updated, PostStatus)
 
 Region (id, name)
 
-Role (enum ADMIN, MODERATOR, USER)
+PostStatus(enum ACTIVE, DELETED)
 
-В качестве хранилища данных необходимо использовать JSON файлы:
+Требования :
 
-users.json, posts.json, regions.json
+1. Придерживаться шаблона MVC (пакеты model, repository, service,
+controller, view)
+2. Для миграции БД использовать https://www.liquibase.org/
+3. Сервисный слой приложения должен быть покрыт юнит тестами (junit, mockito).
+4. Для импорта библиотек использовать Maven
+5. 
+Результатом выполнения проекта должен быть отдельный репозиторий на
+github, с описанием задачи, проекта и инструкцией по локальному запуску
+проекта.
 
-Пользователь в консоли должен иметь возможность создания, получения,
-редактирования и удаления данных.
-
-Слои:
-
-model - POJO классы
-
-repository - классы, реализующие доступ к текстовым файлам
-
-controller - обработка запросов от пользователя
-
-view - все данные, необходимые для работы с консолью
-
-Например:
-User, UserRepository, UserController, UserView и т.д.
-
-Для репозиторного слоя желательно использовать базовый интерфейс:
-
-interface GenericRepository<T,ID>
-
-Interface UserRepository extends GenericRepository<User, Long>
-
-class JsonUserRepositoryImpl implements UserRepository
-
-В рамках данного проекта необходимо активно использовать возможности
-Stream API и шаблоны проектирования.
-
-Результатом выполнения задания должен быть отдельный репозиторий с
-рабочим приложением и описанием работы.
-Необходимо применить
-минимум 2 шаблона проектирования на выбор для любой задачи.
-
-Для работы с JSON файлами необходимо использовать библиотеку gson. Для
-импорта зависимостей - Maven.
+Технологии : Java, MySQL, JDBC, Maven, Liquibase, JUnit, Mockito
