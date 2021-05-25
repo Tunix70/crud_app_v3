@@ -60,7 +60,7 @@ public class PostView {
                     System.out.println(postController.getById(num));
                     runner();
                 } else if (input.equals("6")) {
-                    ConsoleView.mainMenu();
+                    break;
                 } else {
                     System.out.println("Please, enter numbers from 1 to 6");
                     menu();
