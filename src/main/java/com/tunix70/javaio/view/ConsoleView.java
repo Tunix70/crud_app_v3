@@ -13,7 +13,7 @@ public class ConsoleView {
            selectMenu();
        }
 
-       public static void mainMenu(){
+       public void mainMenu(){
            System.out.println("\n*** MAIN MENU ***");
            System.out.println(" ================================= ");
            System.out.println("Choose next action:");
